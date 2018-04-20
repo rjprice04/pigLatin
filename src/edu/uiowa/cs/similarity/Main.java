@@ -1,37 +1,27 @@
 package edu.uiowa.cs.similarity;
 
-import org.apache.commons.cli.*;
-
 import java.io.*;
 
 public class Main {
+	private static void printMenu() {
+		System.out.println("Supported commands:");
+		System.out.println("help - Print the supported commands");
+		System.out.println("quit - Quit this program");
+	}
 
-    public static void main(String[] args) {
-        Options options = new Options();
-        options.addRequiredOption("f", "file", true, "input file to process");
-        options.addOption("h", false, "print this help message");
+    public static void main(String[] args) throws IOException {
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-        CommandLineParser parser = new DefaultParser();
-
-        CommandLine cmd = null;
-        try {
-            cmd = parser.parse(options, args);
-        } catch (ParseException e) {
-            System.err.println(e.getMessage());
-            new HelpFormatter().printHelp("Main", options, true);
-            System.exit(1);
-        }
-
-        String filename = cmd.getOptionValue("f");
-		if (!new File(filename).exists()) {
-			System.err.println("file does not exist "+filename);
-			System.exit(1);
+		while (true) {
+			System.out.print("> ");
+			String command = input.readLine();
+			if (command.equals("help") || command.equals("h")) {
+				printMenu();
+			} else if (command.equals("quit")) {
+				System.exit(0);
+			} else {
+				System.err.println("Unrecognized command");
+			}
 		}
-
-        if (cmd.hasOption("h")) {
-            HelpFormatter helpf = new HelpFormatter();
-            helpf.printHelp("Main", options, true);
-            System.exit(0);
-        }
     }
 }
