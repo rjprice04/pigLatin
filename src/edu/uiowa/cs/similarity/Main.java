@@ -3,9 +3,11 @@ package edu.uiowa.cs.similarity;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 
@@ -18,7 +20,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        String delimiters = "[.?!]";
+        String delimiters = "[.?!\\s]";
+        
+        
         while (true) {
             System.out.print("> ");
             String command = input.readLine();
@@ -28,16 +32,22 @@ public class Main {
                 System.exit(0);
             } else if (command.equals("index")) {
                 ArrayList<String> sentences = new ArrayList();
+                ArrayList<String> words = new ArrayList();
                 System.out.println("file name");
                 String fileName = input.readLine();
                 //file name   ../cleanup_test.txt
-                Iterator<String> sc = new Scanner(new File(fileName)).useDelimiter(delimiters);
+                Scanner sc = new Scanner(new File(fileName)).useDelimiter(" ").useDelimiter(delimiters);
+                String word;
                 while (sc.hasNext()) {
-                    sentences.add(sc.next().toLowerCase());
+                    word=sc.next().toLowerCase();
+                    sentences.add(word);
+
                 }
-                for (int i = 0; i < sentences.size(); i++) {
-                    System.out.println(sentences.get(i));
-                }
+               
+                
+                System.out.println("Num sentences");
+                System.out.println(sentences);
+                
                 System.out.println(sentences.size());
             } else {
                 System.err.println("Unrecognized command");
