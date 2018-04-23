@@ -3,6 +3,7 @@ package edu.uiowa.cs.similarity;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -30,11 +31,16 @@ public class Main {
                 ArrayList<String> sentences = new ArrayList();
                 System.out.println("file name");
                 String fileName = input.readLine();
+                String stopWords = "../stopwords.txt";
                 //file name   ../cleanup_test.txt
                 Iterator<String> sc = new Scanner(new File(fileName)).useDelimiter(delimiters);
+                Iterator<String> sw = new Scanner(new File(stopWords));
+                while (sw.hasNext()) {
+                    stopwords.add(sw.next());
+                }
                 while (sc.hasNext()) {
                     sentences.add(sc.next().toLowerCase());
-                }
+                    }
                 for (int i = 0; i < sentences.size(); i++) {
                     System.out.println(sentences.get(i));
                 }
