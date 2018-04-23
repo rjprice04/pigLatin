@@ -19,7 +19,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         String delimiters = "[.?!]";
-
         while (true) {
             System.out.print("> ");
             String command = input.readLine();
@@ -32,10 +31,9 @@ public class Main {
                 System.out.println("file name");
                 String fileName = input.readLine();
                 //file name   ../cleanup_test.txt
-                
                 Iterator<String> sc = new Scanner(new File(fileName)).useDelimiter(delimiters);
                 while (sc.hasNext()) {
-                    sentences.add(sc.next());
+                    sentences.add(sc.next().toLowerCase());
                 }
                 for (int i = 0; i < sentences.size(); i++) {
                     System.out.println(sentences.get(i));
