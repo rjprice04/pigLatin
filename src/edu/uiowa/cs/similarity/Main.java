@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 
@@ -19,7 +20,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        String delimiters = "[.?!]";
+        String delimiters = "[.?!\\s]";
+
         while (true) {
             System.out.print("> ");
             String command = input.readLine();
@@ -29,21 +31,26 @@ public class Main {
                 System.exit(0);
             } else if (command.equals("index")) {
                 ArrayList<String> sentences = new ArrayList();
+                ArrayList<String> stopwords = new ArrayList();
                 System.out.println("file name");
                 String fileName = input.readLine();
                 String stopWords = "../stopwords.txt";
                 //file name   ../cleanup_test.txt
-                Iterator<String> sc = new Scanner(new File(fileName)).useDelimiter(delimiters);
-                Iterator<String> sw = new Scanner(new File(stopWords));
+                Scanner sc = new Scanner(new File(fileName)).useDelimiter(delimiters);
+                Scanner sw = new Scanner(new File(stopWords));
+                String word;
                 while (sw.hasNext()) {
                     stopwords.add(sw.next());
                 }
                 while (sc.hasNext()) {
-                    sentences.add(sc.next().toLowerCase());
+                    word = sc.next().toLowerCase();
+                    if (!stopwords.contains(word)) {
+                        sentences.add(word);
                     }
-                for (int i = 0; i < sentences.size(); i++) {
-                    System.out.println(sentences.get(i));
                 }
+                System.out.println("Num sentences");
+                System.out.println(sentences);
+
                 System.out.println(sentences.size());
             } else {
                 System.err.println("Unrecognized command");
