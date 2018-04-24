@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Set;
+import opennlp.tools.stemmer.*;
 
 public class Main {
 
@@ -20,7 +21,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        String delimiters = "[.?!\\s]";
+        String delimiters = "[.?!]";
 
         while (true) {
             System.out.print("> ");
@@ -50,7 +51,6 @@ public class Main {
                 }
                 System.out.println("Num sentences");
                 System.out.println(sentences);
-
                 System.out.println(sentences.size());
             } else {
                 System.err.println("Unrecognized command");
