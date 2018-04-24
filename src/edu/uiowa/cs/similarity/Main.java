@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Stack;
 import opennlp.tools.stemmer.*;
 
 public class Main {
@@ -31,25 +32,63 @@ public class Main {
             } else if (command.equals("quit")) {
                 System.exit(0);
             } else if (command.equals("index")) {
-                ArrayList<String> sentences = new ArrayList();
+                ArrayList<String> oneSentence = new ArrayList();
+                LinkedList<ArrayList> allSentences = new LinkedList();
+                LinkedList<ArrayList> sentences = new LinkedList();
                 ArrayList<String> stopwords = new ArrayList();
+                Stack<ArrayList> stack = new Stack();
                 System.out.println("file name");
                 String fileName = input.readLine();
                 String stopWords = "../stopwords.txt";
                 //file name   ../cleanup_test.txt
-                Scanner sc = new Scanner(new File(fileName)).useDelimiter(delimiters);
+                Scanner sc = new Scanner(new File(fileName));//.useDelimiter(delimiters);
+                //Scanner oneSentence;
                 Scanner sw = new Scanner(new File(stopWords));
                 PorterStemmer porterStemmer = new PorterStemmer();
+                //ArrayList oneSentence;
                 String word;
+                ArrayList temp = new ArrayList();
                 while (sw.hasNext()) {
                     stopwords.add(sw.next());
                 }
-                while (sc.hasNext()) {
-                    word = sc.next().toLowerCase();
-                    if (!stopwords.contains(word)) {
-                        sentences.add(porterStemmer.stem(word));
+                for (int i = 0; sc.hasNext(); i++) {
+                    int j = 0;
+                    //words.add(porterStemmer.stem(sc.nextLine().toLowerCase()));
+                    //word = sc.next();
+                    //while (!sc.next().equals("?") && !sc.next().equals(".") && !sc.next().equals("!")) {
+                    word = porterStemmer.stem(sc.next().toLowerCase());
+                    while (true) {
+                        if (!word.contains("?") && !word.contains(".") && !word.contains("!") && sc.hasNext()) {
+                            if (!stopwords.contains(word)) {
+                                oneSentence.add(word);
+                            }
+                            word = porterStemmer.stem(sc.next().toLowerCase());
+                        } else {
+                            oneSentence.add(word.substring(0, word.length() - 1));
+                            break;
+                        }
+                        j++;
+                        //sc.next();
                     }
+                    stack.push(oneSentence);
+                    //allSentences.push(oneSentence);
+                    //sentences.add(stack.pop());
+                    allSentences.add(stack.pop());
+                    sentences = allSentences;
+                    //sentences.push(stack.pop());
+                   oneSentence.clear();
+                   //allSentences.clear();
+                    
                 }
+                //oneSentence = words;
+                //words.add(word);
+//                    if (!stopwords.contains(oneSentence.get(i))) {
+//                        //sentences.add(porterStemmer.stem(word));
+//                        sentences.push(words);
+//                        //sentences.push(porterStemmer.stem(word));
+//                    }
+                //}
+
                 System.out.println("Num sentences");
                 System.out.println(sentences);
                 System.out.println(sentences.size());
