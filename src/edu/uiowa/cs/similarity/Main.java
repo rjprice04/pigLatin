@@ -21,7 +21,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        String delimiters = "[.?!]";
+        String delimiters = "[.?!\\s]";
 
         while (true) {
             System.out.print("> ");
@@ -39,6 +39,7 @@ public class Main {
                 //file name   ../cleanup_test.txt
                 Scanner sc = new Scanner(new File(fileName)).useDelimiter(delimiters);
                 Scanner sw = new Scanner(new File(stopWords));
+                PorterStemmer porterStemmer = new PorterStemmer();
                 String word;
                 while (sw.hasNext()) {
                     stopwords.add(sw.next());
@@ -46,7 +47,8 @@ public class Main {
                 while (sc.hasNext()) {
                     word = sc.next().toLowerCase();
                     if (!stopwords.contains(word)) {
-                        sentences.add(word);
+                        sentences.add(porterStemmer.stem(word));
+
                     }
                 }
                 System.out.println("Num sentences");
