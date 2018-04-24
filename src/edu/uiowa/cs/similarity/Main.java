@@ -48,7 +48,6 @@ public class Main {
                     word = sc.next().toLowerCase();
                     if (!stopwords.contains(word)) {
                         sentences.add(porterStemmer.stem(word));
-
                     }
                 }
                 System.out.println("Num sentences");
