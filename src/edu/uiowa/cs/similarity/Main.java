@@ -2,10 +2,12 @@ package edu.uiowa.cs.similarity;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
@@ -28,10 +30,15 @@ public class Main {
         }
         return stopwords;
     }
-
+/******************************TODO*********************************************
+ * 1- fix the last sentences so it doesn't read in the ! and same              *
+ * 2- Work on adding vectors they mention adding a class to do that            *
+ *      -- I am thinking a map using the words as the key so then we don't have*
+ *         duplicates of the same word. For the values I'm not sure yet.       *
+ * 3- Start working on the cosine vector thing.                                *
+ *******************************************************************************/
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        String delimiters = "[.?!,\\s]";
         LinkedList<ArrayList> sentences = new LinkedList();
         ArrayList stopwords=getStopWords();
         while (true) {
@@ -67,23 +74,23 @@ public class Main {
                             if (!stopwords.contains(word)) {
                                 oneSentence.add(word);
                             }
-                            word = porterStemmer.stem(sc.next().toLowerCase());
+                            //word = porterStemmer.stem(sc.next().toLowerCase());
                         } 
                         else {
                             oneSentence.add(word.substring(0, word.length() - 1));
                             break;
                         }
-
+                        word = porterStemmer.stem(sc.next().toLowerCase());
                     }
-                    temp=new ArrayList(oneSentence);
+                    temp = new ArrayList(oneSentence);
                     sentences.add(temp);
                     oneSentence.clear();
                 }
-
-            } 
+                Vectors vectors;
+            }
             else if(command.equals("sentences")){
                 System.out.println(sentences);
-                System.out.println("Num sentences");
+                System.out.println("Number of sentences");
                 System.out.println(sentences.size());
             }
             else if(command.equals("vectors")){
@@ -94,4 +101,27 @@ public class Main {
             }
         }
     }
+    public class Vectors{
+        Map<String, Integer> subMap;
+        Map<String, Map<String, Integer>> vectorMap;
+        
+      
+        private Vectors(LinkedList<ArrayList> sentences) {
+            ArrayList sentence;
+            String word;
+            for (int i=0;i<sentences.size();i++){
+                sentence=sentences.get(i);
+                for(int j=0; j<sentence.size();j++){
+                    word= (String)sentence.get(i);
+                    if(!vectorMap.containsKey(word)){
+                        vectorMap.put(word, subMap);
+                    }
+                    else{
+                        subMap=vectorMap.get(word);
+                        
+                    }
+                }
+            }
+        }
+    }  
 }
