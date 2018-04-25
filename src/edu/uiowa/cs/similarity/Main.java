@@ -4,6 +4,7 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.util.AbstractSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -92,13 +93,13 @@ public class Main {
                     sentences.add(temp);
                     oneSentence.clear();
                 }
-                 new Vectors(sentences);
+                 Vectors vector =new Vectors(sentences);
             } else if (command.equals("sentences")) {
                 System.out.println(sentences);
                 System.out.println("Number of sentences");
                 System.out.println(sentences.size());
             } else if (command.equals("vectors")) {
-                Vectors.printVector();
+                    
             } else {
                 System.err.println("Unrecognized command");
             }
@@ -106,29 +107,58 @@ public class Main {
     }
     
     private static class Vectors{
-        Map<String, Integer> subMap;
-        Map<String, Map<String, Integer>> vectorMap;
+        //public Map<String, Integer> subMap;
+        public Map<String, Map<String, Double>> vectorMap;
         
       
         private Vectors(LinkedList<ArrayList> sentences) {
-            ArrayList sentence;
-            String word;
-            for (int i=0;i<sentences.size();i++){
+            this.vectorMap=new HashMap();
+            ArrayList sentence; 
+            String word; // key for vector map
+            Map<String, Double> subMap = new HashMap();
+            Set<String> listOfWords = new HashSet<>();
+            Map<String, Map<String, Double>> vectorMap= new HashMap();
+            for (int i=0;i<sentences.size();i++){ //Fills the map that will go within the vectorMap
                 sentence=sentences.get(i);
                 for(int j=0; j<sentence.size();j++){
-                    word= (String)sentence.get(i);
-                    if(!vectorMap.containsKey(word)){
-                        vectorMap.put(word, subMap);
-                    }
-                    else{
-                        subMap=vectorMap.get(word);
-                        
-                    }
+                    word= (String)sentence.get(j);
+                    subMap.put(word, 0.0); 
+                    
                 }
             }
-        }
-        private static void printVector(){
-            
-        }
-    }  
+            System.out.println("SubMap of words " +subMap);
+            //Fills the vectorMap
+            for (int k=0;k<sentences.size();k++){ //Fills the map that will go within the vectorMap
+                sentence=sentences.get(k);
+                for(int m=0; m<sentence.size();m++){
+                    word = (String)sentence.get(m);
+                    vectorMap.put(word, subMap); 
+                    
+                }
+            }
+            String keyWord;
+            String subKeyWord;
+            double value;
+            this.vectorMap=vectorMap;
+            System.out.println("VectorMap of words " +vectorMap);
+            //Add the values for words
+            for(int i = 0; i<sentences.size();i++){
+                sentence=sentences.get(i);
+                for(int j=0; j<sentence.size();j++){
+                    keyWord=(String)sentence.get(j);
+                    subMap=this.vectorMap.get(keyWord);
+                    for(int k=0; k<sentence.size();k++){
+                        subKeyWord=(String)sentence.get(k);
+                        value=subMap.get(subKeyWord);
+                        subMap.replace(subKeyWord, value, value+1);
+                    }
+                    this.vectorMap.put(keyWord, subMap);
+                }
+                
+            }
+            System.out.println("New vectorMap "+this.vectorMap);
+       }
+    }
 }
+    
+
