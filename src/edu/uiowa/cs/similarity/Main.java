@@ -33,7 +33,6 @@ public class Main {
         return stopwords;
     }
 /******************************TODO*********************************************
- * 1- fix the last sentences so it doesn't read in the ! and same              *
  * 2- Work on adding vectors they mention adding a class to do that            *
  *      -- I am thinking a map using the words as the key so then we don't have*
  *         duplicates of the same word. For the values I'm not sure yet.       *
