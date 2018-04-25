@@ -21,7 +21,8 @@ public class Main {
         System.out.println("quit - Quit this program");
         System.out.println("index - Name of the file. Creates the index of a file");
     }
-    private static ArrayList getStopWords() throws FileNotFoundException{
+
+    private static ArrayList getStopWords() throws FileNotFoundException {
         ArrayList<String> stopwords = new ArrayList();
         String stopWords = "../stopwords.txt";
         Scanner sw = new Scanner(new File(stopWords));
@@ -40,68 +41,71 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         LinkedList<ArrayList> sentences = new LinkedList();
-        ArrayList stopwords=getStopWords();
+        ArrayList stopwords = getStopWords();
+        //Vectors vector;
         while (true) {
             System.out.print("> ");
             String command = input.readLine();
             if (command.equals("help") || command.equals("h")) {
                 printMenu();
-            } 
-            else if (command.equals("quit")) {
+            } else if (command.equals("quit")) {
                 System.exit(0);
-            } 
-            else if (command.contains("index")) {
+            } else if (command.contains("index")) {
                 ArrayList<String> oneSentence = new ArrayList();
                 ArrayList temp;
                 String fileName; //  ../cleanup_test.txt
-                if(command.length()<6){
+                if (command.length() < 6) {
                     System.out.println("Enter file name");
                     fileName = input.readLine();
+                } else {
+                    fileName = command.substring(6);
                 }
-                else{
-                    fileName=command.substring(6);
-                }
-                System.out.println("Indexing "+fileName);
+                System.out.println("Indexing " + fileName);
                 Scanner sc = new Scanner(new File(fileName));
                 PorterStemmer porterStemmer = new PorterStemmer();
                 String word;
 
-                while(sc.hasNext()){   
-
-                    word = porterStemmer.stem(sc.next().toLowerCase());
+                while (sc.hasNext()) {
+                    word = sc.next().toLowerCase();
                     while (true) {
                         if (!word.contains("?") && !word.contains(".") && !word.contains("!") && sc.hasNext()) {
                             if (!stopwords.contains(word)) {
-                                oneSentence.add(word);
+                                word = porterStemmer.stem(word);
+                                if (word.contains(",")) {
+                                    oneSentence.add(word.substring(0, word.length() - 1));
+                                } else {
+                                    oneSentence.add(word);
+                                }
                             }
-                            //word = porterStemmer.stem(sc.next().toLowerCase());
-                        } 
-                        else {
-                            oneSentence.add(word.substring(0, word.length() - 1));
+                            word = sc.next().toLowerCase();
+                        } else {
+                            word = word.substring(0, word.length() - 1);
+                            if (word.contains("?") || word.contains(".") || word.contains("!")) {
+                                word = word.substring(0, word.length() - 1);
+                            }
+                            word = porterStemmer.stem(word);
+                            oneSentence.add(word);
                             break;
                         }
-                        word = porterStemmer.stem(sc.next().toLowerCase());
                     }
                     temp = new ArrayList(oneSentence);
                     sentences.add(temp);
                     oneSentence.clear();
                 }
-                Vectors vectors;
-            }
-            else if(command.equals("sentences")){
+                 new Vectors(sentences);
+            } else if (command.equals("sentences")) {
                 System.out.println(sentences);
                 System.out.println("Number of sentences");
                 System.out.println(sentences.size());
-            }
-            else if(command.equals("vectors")){
-                
-            }
-            else {
+            } else if (command.equals("vectors")) {
+                Vectors.printVector();
+            } else {
                 System.err.println("Unrecognized command");
             }
         }
     }
-    public class Vectors{
+    
+    private static class Vectors{
         Map<String, Integer> subMap;
         Map<String, Map<String, Integer>> vectorMap;
         
@@ -122,6 +126,9 @@ public class Main {
                     }
                 }
             }
+        }
+        private static void printVector(){
+            
         }
     }  
 }
