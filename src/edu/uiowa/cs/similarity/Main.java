@@ -40,7 +40,7 @@ public class Main {
         Set<String> stopwords = getStopWords();
         String delimiter = "[?!.]";
         //Vectors vector;
-        Vector aVector = null;
+        Vector aVector = new Vector();
         while (true) {
             System.out.print("> ");
             String command = input.readLine();
