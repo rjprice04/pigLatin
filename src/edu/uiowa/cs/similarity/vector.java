@@ -42,8 +42,7 @@ class Vector {
                 
             }
         }
-
-            
+        
         for (int i=0;i<sentences.size();i++){ //Fills the vectorMap
             oneSentence=sentences.get(i);
             for(int j=0; j<oneSentence.size();j++){
