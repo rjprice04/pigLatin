@@ -49,8 +49,9 @@ class Vector {
                         subMap.put(subKeyWord, 1.0);
                     }
                 }
+                this.vectorMap.put(keyWord, subMap);
             }
-            this.vectorMap.put(keyWord, subMap);
+            //this.vectorMap.put(keyWord, subMap);
         }
     }
 }
