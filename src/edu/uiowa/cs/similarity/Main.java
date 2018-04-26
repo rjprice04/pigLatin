@@ -17,6 +17,7 @@ public class Main {
         System.out.println("help - Print the supported commands");
         System.out.println("quit - Quit this program");
         System.out.println("index - Name of the file. Creates the index of a file");
+        System.out.println("sentences - Prints the sentences. Prints the number of sentences");
     }
 
     private static Set getStopWords() throws FileNotFoundException {
@@ -72,7 +73,6 @@ public class Main {
                     while(sw.hasNext()){
                         //should have individual words now
                         word=sw.next().toLowerCase();
-                        
                         if(!stopwords.contains(word) && word.length()>1){
                            word = porterStemmer.stem(word);
                            if(word.contains(",")){
