@@ -25,35 +25,38 @@ class Vector {
         System.out.println(this.vectorMap);
     }
 
-    Vector(LinkedList<ArrayList> sentences) {
-        this.vectorMap = new HashMap();
-        ArrayList oneSentence;
-        Map<String, Double> subMap = new HashMap();
-        Set<String> wordsInSentence = new HashSet();
-        double value;
-        String keyWord;
-        for (int i = 0; i < sentences.size(); i++) { //Fills the subMap 
-            //gets one sentence of the paragraph
-            oneSentence = sentences.get(i);
-            wordsInSentence.addAll(oneSentence);
-            for (int j = 0; j < oneSentence.size(); j++) {
-                //gets one word of the sentence
-                keyWord=(String)oneSentence.get(j);
-                
-            }
-        }
-        
-        for (int i=0;i<sentences.size();i++){ //Fills the vectorMap
-            oneSentence=sentences.get(i);
-            for(int j=0; j<oneSentence.size();j++){
-                this.vectorMap.put((String)oneSentence.get(j), subMap); 
-            }
-        }
-
-        System.out.println("New vectorMap " + this.vectorMap);
+    Vector() {
+         this.vectorMap = new HashMap();
     }
 
     void addToMap(ArrayList<String> oneSentence) {
-        
+        /*Step 1 get a word for the key
+        Step 2: add the values for the subMap
+            get subWordKey
+            get sub word value
+        Step 3 put keyWord and subMap together
+        */
+        String keyWord;
+        Map<String, Double> subMap = new HashMap();
+        Map<String, Double> temp;
+        String subKeyWord;
+        for(int i=0; i<oneSentence.size();i++){
+            keyWord = oneSentence.get(i);
+            if(!this.vectorMap.containsKey(keyWord)){
+                for(int j=0; j<oneSentence.size();j++){
+                    // subMap = new HashMap();
+                    subKeyWord=oneSentence.get(j);
+                    if(!(keyWord.equals(subKeyWord))){
+                        subMap.put(subKeyWord, 1.0);
+                    }
+                }
+            }
+            temp = new HashMap();
+            temp.putAll(subMap);
+            this.vectorMap.put(keyWord, subMap);
+            subMap.clear();
+        }
     }
 }
+    
+    
