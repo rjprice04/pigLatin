@@ -5,7 +5,6 @@
  */
 package edu.uiowa.cs.similarity;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,12 +20,12 @@ class Vector {
 
     public Map<String, Map<String, Double>> vectorMap;
 
-     void print() {
+    void print() {
         System.out.println(this.vectorMap);
     }
 
     Vector() {
-         this.vectorMap = new HashMap();
+        this.vectorMap = new HashMap();
     }
 
     void addToMap(ArrayList<String> oneSentence) {
@@ -35,20 +34,37 @@ class Vector {
             get subWordKey
             get sub word value
         Step 3 put keyWord and subMap together
-        */
+         */
+        //                  index ../cleanup_test.txt
+        //                  index ../vector_test.txt
         String keyWord;
         Map<String, Double> subMap = new HashMap();
         Map<String, Double> temp;
         String subKeyWord;
-        for(int i=0; i<oneSentence.size();i++){
+        for (int i = 0; i < oneSentence.size(); i++) {
             keyWord = oneSentence.get(i);
-            if(!this.vectorMap.containsKey(keyWord)){
-                for(int j=0; j<oneSentence.size();j++){
+            if (!this.vectorMap.containsKey(keyWord)) {
+                for (int j = 0; j < oneSentence.size(); j++) {
                     // subMap = new HashMap();
-                    subKeyWord=oneSentence.get(j);
-                    if(!(keyWord.equals(subKeyWord))){
+                    subKeyWord = oneSentence.get(j);
+                    if (!(keyWord.equals(subKeyWord))) {
                         subMap.put(subKeyWord, 1.0);
                     }
+                }
+            } else {
+                subMap = this.vectorMap.get(keyWord);
+                for (int k = 0; k < oneSentence.size(); k++) {
+                    subKeyWord = oneSentence.get(k);
+                    if (subMap.containsKey(subKeyWord)) {
+                        double tempValue;
+                        tempValue = subMap.get(subKeyWord);
+                        subMap.replace(subKeyWord, tempValue, tempValue + 1.0);
+                    } else {
+                        if (!subKeyWord.equals(keyWord)) {
+                            subMap.put(subKeyWord, 1.0);
+                        }
+                    }
+
                 }
                // this.vectorMap.put(keyWord, subMap);
             }
@@ -59,5 +75,3 @@ class Vector {
         }
     }
 }
-    
-    
