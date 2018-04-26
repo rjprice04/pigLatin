@@ -38,6 +38,7 @@ class Vector {
         */
         String keyWord;
         Map<String, Double> subMap = new HashMap();
+        Map<String, Double> temp;
         String subKeyWord;
         for(int i=0; i<oneSentence.size();i++){
             keyWord = oneSentence.get(i);
@@ -49,9 +50,12 @@ class Vector {
                         subMap.put(subKeyWord, 1.0);
                     }
                 }
-                this.vectorMap.put(keyWord, subMap);
+               // this.vectorMap.put(keyWord, subMap);
             }
-            //this.vectorMap.put(keyWord, subMap);
+            temp = new HashMap();
+            temp.putAll(subMap);
+            this.vectorMap.put(keyWord, temp);
+            subMap.clear();
         }
     }
 }
