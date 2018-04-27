@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import opennlp.tools.stemmer.*;
@@ -16,8 +17,10 @@ public class Main {
         System.out.println("Supported commands:");
         System.out.println("help - Print the supported commands");
         System.out.println("quit - Quit this program");
-        System.out.println("index - Name of the file. Creates the index of a file");
-        System.out.println("sentences - Prints the sentences. Prints the number of sentences");
+        System.out.println("index - Input:Name of the file. Creates the index of a file");
+        System.out.println("sentences - Prints the sentences and number of sentences");
+        System.out.println("vectors - Prints the vectors");
+        System.out.println("topj- Input: Word(Q) and number(J). Find the J most simalar words to Q" );
     }
 
     private static Set getStopWords() throws FileNotFoundException {
@@ -37,10 +40,9 @@ public class Main {
  *******************************************************************************/
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        LinkedList<ArrayList> sentences = new LinkedList();
+        List<ArrayList> sentences = new ArrayList();
         Set<String> stopwords = getStopWords();
         String delimiter = "[?!.]";
-        //Vectors vector;
         Vector aVector = new Vector();
         while (true) {
             System.out.print("> ");
@@ -73,6 +75,9 @@ public class Main {
                     while(sw.hasNext()){
                         //should have individual words now
                         word=sw.next().toLowerCase();
+                        if(word.endsWith(",")){
+                            word=word.substring(0,word.length()-1);
+                        }
                         if(!stopwords.contains(word) && word.length()>1){
                            word = porterStemmer.stem(word);
                            if(word.contains(",")){
@@ -93,47 +98,25 @@ public class Main {
                 }
                 //aVector = new Vector(sentences);
             }
-//                    word = sc.next().toLowerCase();
-//                    while (true) {
-//                        if (!word.contains("?") && !word.contains(".") && !word.contains("!") && sc.hasNext()) {
-//                            if (!stopwords.contains(word)) {
-//                                word = porterStemmer.stem(word);
-//                                if (word.contains(",")) {
-//                                    oneSentence.add(word.substring(0, word.length() - 1));
-//                                } else {
-//                                    oneSentence.add(word);
-//                                }
-//                            }
-//                            word = sc.next().toLowerCase();
-//                        } else {
-//                            word = word.substring(0, word.length() - 1);
-//                            if (word.contains("?") || word.contains(".") || word.contains("!")) {
-//                                word = word.substring(0, word.length() - 1);
-//                            }
-//                            word = porterStemmer.stem(word);
-//                            oneSentence.add(word);
-//                            break;
-//                        }
-//                    }
-//                    temp = new ArrayList(oneSentence);
-//                    sentences.add(temp);
-//                    oneSentence.clear();
-//                }
-//                 aVector = new Vector(sentences);
-//                }
-//            }
+
             else if (command.equals("sentences")) {
                 System.out.println(sentences);
                 System.out.println("Number of sentences");
                 System.out.println(sentences.size());
             }
             else if (command.equals("vectors")) {
-                if(aVector == null){
-                    System.out.println("Please index a file");
-                }
-                else{
+               
                     aVector.print();
-                }
+                
+            }
+            else if(command.equals("topj")){
+                String word;
+                System.out.println("What word would you like to use");
+                word=input.readLine();
+                int number;
+                System.out.println("How many word do you want to compare to?");
+                number = input.read();
+                aVector.computeTopJ(word,number);
             }
             else {
                 System.err.println("Unrecognized command");
