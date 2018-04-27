@@ -88,22 +88,24 @@ class Vector {
 
     void computeTopJ(String word, int number) {
         OrderedLinkedList thatList = new OrderedLinkedList();
-        if (this.vectorMap.containsKey(word)) {
-            double uValue = 0;
+          double uValue = 0;
             double uSquared = 0;
             double vValue = 0;
             double vSquared = 0;
-            double cosValue;
+            double numerator =0;
+            double denomiator=0;
+            double cosValue=0;
             String subKeyWord;
-            LinkedList<String> simWords = new LinkedList();
             Set<String> keyValues = new HashSet();
             Map<String, Double> subMap = new HashMap();
             Collection<Double> values = new ArrayList();
+            
+        if (this.vectorMap.containsKey(word)) {
             subMap = this.vectorMap.get(word);
             values.addAll(subMap.values());
             Iterator uV = values.iterator();
             //Gets the value of u
-            double temp;
+            double temp =0.0;
             while (uV.hasNext()) {
                 temp = (Double) uV.next();
                 uValue += temp;
@@ -112,6 +114,7 @@ class Vector {
             //Need to find the v values now
             keyValues = this.vectorMap.keySet();
             Iterator keys = keyValues.iterator();
+            temp=0.0;
             while (keys.hasNext()) {
                 subKeyWord = (String) keys.next();
                 if (!subKeyWord.equals(word)) { //dont check the word cause it will be 1
@@ -123,7 +126,11 @@ class Vector {
                         vValue += temp;
                         vSquared = vValue + (temp * temp);
                     }
-                    cosValue = (uValue * vValue) / (Math.sqrt(uSquared * vSquared));
+                    temp=0;
+                    numerator = uValue*vValue;
+                    denomiator = uSquared*vSquared;
+                    denomiator=Math.sqrt(denomiator);
+                    cosValue = numerator / denomiator ;
                     thatList.addOrder(subKeyWord, cosValue);
                     //need to compare and add to a list of some sort 
                 }
