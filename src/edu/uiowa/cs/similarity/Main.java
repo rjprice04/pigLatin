@@ -10,7 +10,6 @@ import java.util.Scanner;
 import java.util.Set;
 import opennlp.tools.stemmer.*;
 
-
 public class Main {
 
     private static void printMenu() {
@@ -20,7 +19,7 @@ public class Main {
         System.out.println("index - Input:Name of the file. Creates the index of a file");
         System.out.println("sentences - Prints the sentences and number of sentences");
         System.out.println("vectors - Prints the vectors");
-        System.out.println("topj- Input: Word(Q) and number(J). Find the J most simalar words to Q" );
+        System.out.println("topj- Input: Word(Q) and number(J). Find the J most simalar words to Q");
     }
 
     private static Set getStopWords() throws FileNotFoundException {
@@ -32,12 +31,15 @@ public class Main {
         }
         return stopwords;
     }
-/******************************TODO*********************************************
- * 2- Work on adding vectors they mention adding a class to do that            *
- *      -- I am thinking a map using the words as the key so then we don't have*
- *         duplicates of the same word. For the values I'm not sure yet.       *
- * 3- Start working on the cosine vector thing.                                *
- *******************************************************************************/
+
+    /**
+     * ****************************TODO*********************************************
+     * 2- Work on adding vectors they mention adding a class to do that * -- I
+     * am thinking a map using the words as the key so then we don't have*
+     * duplicates of the same word. For the values I'm not sure yet. * 3- Start
+     * working on the cosine vector thing. *
+ ******************************************************************************
+     */
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         List<ArrayList> sentences = new ArrayList();
@@ -49,11 +51,9 @@ public class Main {
             String command = input.readLine();
             if (command.equals("help") || command.equals("h")) {
                 printMenu();
-            } 
-            else if (command.equals("quit")) {
+            } else if (command.equals("quit")) {
                 System.exit(0);
-            } 
-            else if (command.contains("index")) {
+            } else if (command.contains("index")) {
                 ArrayList<String> oneSentence = new ArrayList();
                 ArrayList temp;
                 String fileName; //  ../cleanup_test.txt
@@ -61,7 +61,7 @@ public class Main {
                     System.out.println("Enter file name");
                     fileName = input.readLine();
                 } else {
-                    fileName=command.substring(6);// six being the index after the space after index
+                    fileName = command.substring(6);// six being the index after the space after index
                 }
                 System.out.println("Indexing " + fileName);
                 Scanner sc = new Scanner(new File(fileName)).useDelimiter(delimiter);
@@ -72,58 +72,51 @@ public class Main {
                     //read in a sentence
                     sentence = sc.next().toLowerCase();
                     Scanner sw = new Scanner(sentence);
-                    while(sw.hasNext()){
+                    while (sw.hasNext()) {
                         //should have individual words now
-                        word=sw.next().toLowerCase();
-                        if(word.endsWith(",")){
-                            word=word.substring(0,word.length()-1);
+                        word = sw.next().toLowerCase();
+                        if (word.endsWith(",")) {
+                            word = word.substring(0, word.length() - 1);
                         }
-                        if(!stopwords.contains(word) && word.length()>1){
-                           word = porterStemmer.stem(word);
-                           if(word.contains(",")){
-                               oneSentence.add(word.substring(0,word.length()-1));
-                           }
-                           else{
+                        if (!stopwords.contains(word) && word.length() > 1) {
+                            word = porterStemmer.stem(word);
+                            if (word.contains(",")) {
+                                oneSentence.add(word.substring(0, word.length() - 1));
+                            } else {
                                 oneSentence.add(word);
-                           }
+                            }
                         }
                     }
-                    if(!oneSentence.isEmpty()){
-                        temp= new ArrayList(oneSentence);
+                    if (!oneSentence.isEmpty()) {
+                        temp = new ArrayList(oneSentence);
                         aVector.addToMap(oneSentence);
                         sentences.add(temp);
                         oneSentence.clear();
                     }
-                    
+
                 }
                 //aVector = new Vector(sentences);
-            }
-
-            else if (command.equals("sentences")) {
+            } else if (command.equals("sentences")) {
                 System.out.println(sentences);
                 System.out.println("Number of sentences");
                 System.out.println(sentences.size());
-            }
-            else if (command.equals("vectors")) {
-               
-                    aVector.print();
-                
-            }
-            else if(command.equals("topj")){
+            } else if (command.equals("vectors")) {
+
+                aVector.print();
+
+            } else if (command.equals("topj")) {
                 String word;
                 System.out.println("What word would you like to use");
-                word=input.readLine();
-                int number;
+                word = input.readLine();
+               // int number;
                 System.out.println("How many word do you want to compare to?");
-                number = input.read();
-                aVector.computeTopJ(word,number);
-            }
-            else {
+                Scanner reader = new Scanner(System.in);  // Reading from System.in
+                int number = reader.nextInt();
+                aVector.computeTopJ(word, number);
+            } else {
                 System.err.println("Unrecognized command");
             }
         }
     }
 
 }
-    
-
