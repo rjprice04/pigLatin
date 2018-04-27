@@ -6,10 +6,13 @@
 package edu.uiowa.cs.similarity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -21,7 +24,12 @@ class Vector {
     public Map<String, Map<String, Double>> vectorMap;
 
     void print() {
-        System.out.println(this.vectorMap);
+        if(this.vectorMap.isEmpty()){
+            System.out.println("Please index a file and try again for help type help");
+        }
+        else{
+            System.out.println(this.vectorMap);
+        }
     }
 
     Vector() {
@@ -29,14 +37,17 @@ class Vector {
     }
 
     void addToMap(ArrayList<String> oneSentence) {
-        /*Step 1 get a word for the key
+        /*****
+        Step 1 get a word for the key
         Step 2: add the values for the subMap
             get subWordKey
             get sub word value
         Step 3 put keyWord and subMap together
-         */
-        //                  index ../cleanup_test.txt
-        //                  index ../vector_test.txt
+        
+        index ../cleanup_test.txt
+        index ../vector_test.txt
+         *******/
+               
         String keyWord;
         Map<String, Double> subMap = new HashMap();
         Map<String, Double> temp;
@@ -68,10 +79,59 @@ class Vector {
                 }
                // this.vectorMap.put(keyWord, subMap);
             }
-            temp = new HashMap();
-            temp.putAll(subMap);
-            this.vectorMap.put(keyWord, temp);
-            subMap.clear();
+            if(!subMap.isEmpty()){
+                temp = new HashMap();
+                temp.putAll(subMap);
+                this.vectorMap.put(keyWord, temp);
+                subMap.clear();
+            }
         }
+    }
+
+    void computeTopJ(String word, int number) {
+       if(this.vectorMap.containsKey(word)){
+           double uValue=0;
+           double uSquared=0;
+           double vValue=0;
+           double vSquared=0;
+           double cosValue;
+           String subKeyWord;
+           LinkedList<String> simWords = new LinkedList();
+           Set<String> keyValues = new HashSet();
+           Map<String, Double> subMap = new HashMap();
+           Collection<Double> values = new ArrayList();
+           subMap=this.vectorMap.get(word);
+           values.addAll(subMap.values());
+           Iterator uV=values.iterator();
+           //Gets the value of u
+           double temp;
+           while(uV.hasNext()){
+               temp=(Double)uV.next();
+               uValue+=temp;
+               uSquared=uValue+(temp*temp);
+           }
+           //Need to find the v values now
+           keyValues=this.vectorMap.keySet();
+           Iterator keys=keyValues.iterator();
+           while(keys.hasNext()){
+               subKeyWord=(String)keys.next();
+               if(!subKeyWord.equals(word)){ //dont check the word cause it will be 1
+                    subMap=this.vectorMap.get(subKeyWord);
+                    values.addAll(subMap.values());
+                    Iterator vV=values.iterator();
+                    while(vV.hasNext()){
+                        temp=(Double)vV.next();
+                        vValue+=temp;
+                        vSquared=vValue+(temp*temp);
+                    }
+                    cosValue=(uValue*vValue)/(Math.sqrt(uSquared*vSquared));
+                    //need to compare and add to a list of some sort 
+               }
+           }
+
+       }
+       else{
+           System.out.println("Cannot compute TopJ similarity to "+ word);
+       }
     }
 }
