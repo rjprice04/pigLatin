@@ -42,8 +42,7 @@ class Vector {
          * get subWordKey get sub word value Step 3 put keyWord and subMap
          * together
          *
-         * index ../cleanup_test.txt index ../vector_test.txt
-         ******
+         * index ../cleanup_test.txt index ../vector_test.txt *****
          */
 
         String keyWord;
@@ -88,33 +87,34 @@ class Vector {
 
     void computeTopJ(String word, int number) {
         OrderedLinkedList thatList = new OrderedLinkedList();
-          double uValue = 0;
-            double uSquared = 0;
-            double vValue = 0;
-            double vSquared = 0;
-            double numerator =0;
-            double denomiator=0;
-            double cosValue=0;
-            String subKeyWord;
-            Set<String> keyValues = new HashSet();
-            Map<String, Double> subMap = new HashMap();
-            Collection<Double> values = new ArrayList();
-            
+        double uValue = 1;
+        double uSquared = 1;
+        double vValue = 1;
+        double vSquared = 1;
+        double numerator = 1;
+        double denomiator = 1;
+        double cosValue = 1;
+        String subKeyWord;
+        Set<String> keyValues = new HashSet();
+        Map<String, Double> subMap = new HashMap();
+        Collection<Double> values = new ArrayList();
+//   ../easy_sanity_test.txt
         if (this.vectorMap.containsKey(word)) {
             subMap = this.vectorMap.get(word);
             values.addAll(subMap.values());
             Iterator uV = values.iterator();
             //Gets the value of u
-            double temp =0.0;
+            double temp = 0.0;
             while (uV.hasNext()) {
-                temp = (Double) uV.next();
+                temp = (double) uV.next();
                 uValue += temp;
-                uSquared = uValue + (temp * temp);
+                uSquared = uValue + Math.pow(temp,2);
+                //uSquared = uValue + (temp * temp);
             }
             //Need to find the v values now
             keyValues = this.vectorMap.keySet();
             Iterator keys = keyValues.iterator();
-            temp=0.0;
+            temp = 0.0;
             while (keys.hasNext()) {
                 subKeyWord = (String) keys.next();
                 if (!subKeyWord.equals(word)) { //dont check the word cause it will be 1
@@ -122,15 +122,16 @@ class Vector {
                     values.addAll(subMap.values());
                     Iterator vV = values.iterator();
                     while (vV.hasNext()) {
-                        temp = (Double) vV.next();
+                        temp = (double) vV.next();
                         vValue += temp;
-                        vSquared = vValue + (temp * temp);
+                        //vSquared = vValue + (temp * temp);
+                        vSquared = vValue + Math.pow(temp, 2);
                     }
-                    temp=0;
-                    numerator = uValue*vValue;
-                    denomiator = uSquared*vSquared;
-                    denomiator=Math.sqrt(denomiator);
-                    cosValue = numerator / denomiator ;
+                    temp = 0;
+                    numerator = uValue * vValue;
+                    denomiator = uSquared * vSquared;
+                    denomiator = Math.sqrt(denomiator);
+                    cosValue = numerator / denomiator;
                     thatList.addOrder(subKeyWord, cosValue);
                     //need to compare and add to a list of some sort 
                 }
