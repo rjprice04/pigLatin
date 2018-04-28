@@ -45,7 +45,7 @@ public class Main {
         List<ArrayList> sentences = new ArrayList();
         Set<String> stopwords = getStopWords();
         String delimiter = "[?!.]";
-        Vector aVector = new Vector();
+        vector aVector = new vector();
         while (true) {
             System.out.print("> ");
             String command = input.readLine();
