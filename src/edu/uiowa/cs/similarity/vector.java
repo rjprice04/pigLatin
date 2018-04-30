@@ -94,7 +94,7 @@ public class vector {
             double cosValue;
             double tempValueU;
             double tempValueV;
-            String subKeyWord= " ";
+            String subKeyWord = " ";
             Set<String> subKeyValues;
             Map<String, Double> subMapForUValues;
             Map<String, Double> subMapForVValues;
@@ -104,66 +104,61 @@ public class vector {
 
             subMapForUValues = this.vectorMap.get(word);
             valuesForPickedWord.addAll(subMapForUValues.values());
-            Iterator u2Values = valuesForPickedWord.iterator(); 
+            Iterator u2Values = valuesForPickedWord.iterator();
             while (u2Values.hasNext()) { //gets the uSquared value
 
-                tempValueU = (double) u2Values.next(); 
+                tempValueU = (double) u2Values.next();
                 uSquared += Math.pow(tempValueU, 2);
             }
 
-            subKeyValues = this.vectorMap.keySet(); 
+            subKeyValues = this.vectorMap.keySet();
             Iterator subKeys = subKeyValues.iterator();
-            
+
             while (subKeys.hasNext()) {
 
                 subKeyWord = (String) subKeys.next();
                 if (!subKeyWord.equals(word)) {
-                    subMapForVValues = this.vectorMap.get(subKeyWord); 
+                    subMapForVValues = this.vectorMap.get(subKeyWord);
                     valuesForOtherWords.addAll(subMapForVValues.values());
-                    Iterator v2Values = valuesForOtherWords.iterator(); 
+                    Iterator v2Values = valuesForOtherWords.iterator();
                     while (v2Values.hasNext()) {  //gets the vSquared value
-                        tempValueV = (double) v2Values.next(); 
-                        vSquared += Math.pow(tempValueV, 2); 
+                        tempValueV = (double) v2Values.next();
+                        vSquared += Math.pow(tempValueV, 2);
                     }
                 }
             }
-            
+
             subMapForUValues = this.vectorMap.get(word);
             valuesForPickedWord.addAll(subMapForUValues.values());
-            Iterator uValues = valuesForPickedWord.iterator(); 
-            while(uValues.hasNext()){
-                
-                tempValueU = (double)uValues.next();
-                subKeys=subKeyValues.iterator();
-                while(subKeys.hasNext()){
-                    subKeyWord=(String)subKeys.next();
-                    
-                    if(!word.equals(subKeyWord)){
-                        numerator=0;
+            Iterator uValues = valuesForPickedWord.iterator();
+            while (uValues.hasNext()) {
+
+                tempValueU = (double) uValues.next();
+                subKeys = subKeyValues.iterator();
+                while (subKeys.hasNext()) {
+                    subKeyWord = (String) subKeys.next();
+
+                    if (!word.equals(subKeyWord)) {
+                        numerator = 0;
                         subMapForVValues = this.vectorMap.get(subKeyWord);
                         valuesForOtherWords.addAll(subMapForVValues.values());
-                        Iterator vValues =valuesForOtherWords.iterator();
-                        while(vValues.hasNext()){
-                            tempValueV= (double)vValues.next();
-                            if(subMapForUValues.containsKey(subKeyWord)){
-                                numerator+=(tempValueU*tempValueV);
+                        Iterator vValues = valuesForOtherWords.iterator();
+                        while (vValues.hasNext()) {
+                            tempValueV = (double) vValues.next();
+                            if (subMapForUValues.containsKey(subKeyWord)) {
+                                numerator += (tempValueU * tempValueV);
                             }
 
                         }
-                    
-                        
                     }
-                  
-                    denomiator=Math.sqrt(uSquared*vSquared);
-                    cosValue=numerator/denomiator;
-                    thatList.addOrder(subKeyWord,cosValue);
-                    
+                    denomiator = Math.sqrt(uSquared * vSquared);
+                    System.out.println(subKeyWord + " " + denomiator + " " + numerator);
+                    cosValue = numerator / denomiator;
+                    thatList.addOrder(subKeyWord, cosValue);
+
                 }
-                
-                
+
             }
-            
-            
 
         } else {
             System.out.println("Cannot compute TopJ similarity to " + word);
