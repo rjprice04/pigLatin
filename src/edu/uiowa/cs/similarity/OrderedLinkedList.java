@@ -29,9 +29,9 @@ public class OrderedLinkedList extends LinkedList {
 
     public void print(int num) {
         ListNode current = header.next;
-        int i=0;
+        int i = 0;
         System.out.print("[");
-        while(current.next!=null&&i < num){// (int i = 0; i < num; i++) {
+        while (current.next != null && i < num) {// (int i = 0; i < num; i++) {
             System.out.print("Pair{" + current.getWord() + ", " + current.getCosValue() + "}");
             current = current.next;
             i++;
