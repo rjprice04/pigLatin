@@ -34,8 +34,10 @@ public class Main {
 
     /*******************************TODO***************************************
     * 1- Start working on the cosine vector thing.                            *
-    * 2-work on doing the other ways to get similarity                        *
+    * 2- work on doing the other ways to get similarity                       *
     * 3- work on clusters                                                     *
+     * @param args
+     * @throws java.io.IOException
     ***************************************************************************/
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
