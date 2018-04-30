@@ -74,6 +74,7 @@ public class vector {
                 }
                 // this.vectorMap.put(keyWord, subMap);
             }
+            
             if (!subMap.isEmpty()) {
                 temp = new HashMap();
                 temp.putAll(subMap);
