@@ -32,14 +32,11 @@ public class Main {
         return stopwords;
     }
 
-    /**
-     * ****************************TODO*********************************************
-     * 2- Work on adding vectors they mention adding a class to do that * -- I
-     * am thinking a map using the words as the key so then we don't have*
-     * duplicates of the same word. For the values I'm not sure yet. * 3- Start
-     * working on the cosine vector thing. *
- ******************************************************************************
-     */
+    /*******************************TODO***************************************
+    * 1- Start working on the cosine vector thing.                            *
+    * 2-work on doing the other ways to get similarity                        *
+    * 3- work on clusters                                                     *
+    ***************************************************************************/
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         List<ArrayList> sentences = new ArrayList();
