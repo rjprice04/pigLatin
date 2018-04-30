@@ -4,7 +4,6 @@ import java.io.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -39,6 +38,7 @@ public class Main {
      * @param args
      * @throws java.io.IOException
     ***************************************************************************/
+    
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         List<ArrayList> sentences = new ArrayList();
