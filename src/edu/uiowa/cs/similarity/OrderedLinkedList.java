@@ -11,27 +11,34 @@ public class OrderedLinkedList extends LinkedList {
 
     private ListNode header;
 
-    public OrderedLinkedList() {
+    public OrderedLinkedList( ) {
         header = new ListNode(null, 0);
+        
     }
 
-    void addOrder(String word, double value) {
+    void addOrder(String word, double value,int length) {
         ListNode current = header;
-        ListNode temp = header;
+        ListNode temp;
         ListNode newNode = new ListNode(word, value);
-        while (current.next != null && current.getCosValue() >= value) {
+        int count=0;
+        while (current.next != null && current.getCosValue() >= value && count<length) {
             current = current.next;
+            count++;
         }
-        temp = current.next;
-        current.next = newNode;
-        newNode.next = temp;
+            temp = current.next;
+            current.next = newNode;
+            newNode.next = temp;
+ 
     }
 
     public void print(int num) {
+        if(header.next == null){
+            return;
+        }
         ListNode current = header.next;
         int i = 0;
         System.out.print("[");
-        while (current.next != null && i < num) {// (int i = 0; i < num; i++) {
+        while (current.next != null && i < num) {
             System.out.print("Pair{" + current.getWord() + ", " + current.getCosValue() + "}");
             current = current.next;
             i++;
