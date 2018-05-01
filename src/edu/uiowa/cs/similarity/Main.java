@@ -37,7 +37,7 @@ public class Main {
      * am thinking a map using the words as the key so then we don't have*
      * duplicates of the same word. For the values I'm not sure yet. * 3- Start
      * working on the cosine vector thing. *
- ******************************************************************************
+     * *****************************************************************************
      */
     public static void main(String[] args) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -107,11 +107,21 @@ public class Main {
                 String word;
                 System.out.println("What word would you like to use");
                 word = input.readLine();
-               // int number;
+                // int number;
                 System.out.println("How many word do you want to compare to?");
                 Scanner reader = new Scanner(System.in);  // Reading from System.in
                 int number = reader.nextInt();
-                aVector.computeTopJ(word, number);
+                System.out.println("What method would like to use?");
+                String choiceWord = input.readLine();
+                if(choiceWord.equals("euc")){
+                    aVector.computeEucDistance(word, number);
+                } else if(choiceWord.equals("eucnorm")){
+                    
+                } else if(choiceWord.equals("cosine")) {
+                    aVector.computeTopJ(word, number);
+                } else{
+                    aVector.computeTopJ(word, number);
+                }
             } else {
                 System.err.println("Unrecognized command");
             }
