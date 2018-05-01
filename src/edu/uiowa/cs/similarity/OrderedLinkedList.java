@@ -18,7 +18,7 @@ public class OrderedLinkedList extends LinkedList {
         wordsInList = new HashSet();
     }
 
-    void addOrder(String word, double value,int length) {
+    void addOrder(String word, double value, int length) {
         ListNode current = header;
         ListNode temp;
         ListNode newNode = new ListNode(word, value);
