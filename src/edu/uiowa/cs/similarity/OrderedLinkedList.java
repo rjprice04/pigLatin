@@ -5,15 +5,17 @@
  */
 package edu.uiowa.cs.similarity;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 public class OrderedLinkedList extends LinkedList {
 
     private ListNode header;
-
+    private Set wordsInList;
     public OrderedLinkedList( ) {
         header = new ListNode(null, 0);
-        
+        wordsInList = new HashSet();
     }
 
     void addOrder(String word, double value,int length) {
@@ -21,14 +23,16 @@ public class OrderedLinkedList extends LinkedList {
         ListNode temp;
         ListNode newNode = new ListNode(word, value);
         int count=0;
-        while (current.next != null && current.getCosValue() >= value && count<length) {
-            current = current.next;
-            count++;
-        }
+        if(!wordsInList.contains(word)){
+            while (current.next != null && current.getCosValue() >= value && count<length) {
+                current = current.next;
+                count++;
+            }
             temp = current.next;
             current.next = newNode;
             newNode.next = temp;
- 
+            wordsInList.add(word);
+        }
     }
 
     public void print(int num) {
