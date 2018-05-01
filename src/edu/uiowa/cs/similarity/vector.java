@@ -74,7 +74,7 @@ public class vector {
                 }
                 // this.vectorMap.put(keyWord, subMap);
             }
-            
+
             if (!subMap.isEmpty()) {
                 temp = new HashMap();
                 temp.putAll(subMap);
@@ -160,8 +160,31 @@ public class vector {
             System.out.println("Cannot compute TopJ similarity to " + word);
 
         }
-        
-            thatList.print(number);
-       
+
+        thatList.print(number);
+
+    }
+
+    void computeEucDistance(String word, int number) {
+        if (this.vectorMap.containsKey(word)) {
+            Map<String, Double> subMapForUValues;
+            Set<String> subKeyValues;
+            Map<String, Double> subMapForVValues;
+            Collection<Double> valuesForPickedWord = new ArrayList();
+            Collection<Double> valuesForOtherWords = new ArrayList();
+            subMapForUValues = this.vectorMap.get(word);
+            subKeyValues = this.vectorMap.keySet();
+            Iterator subKeys = subKeyValues.iterator();
+            valuesForPickedWord.addAll(subMapForUValues.values());
+            Iterator uValues = valuesForPickedWord.iterator();
+            String subKeyWord;
+            while (subKeys.hasNext()) {
+                subKeyWord = (String) subKeys.next();
+                subMapForVValues = this.vectorMap.get(subKeyWord);
+                valuesForOtherWords.addAll(subMapForVValues.values()); //gets the values for that key
+                Iterator vValues = valuesForOtherWords.iterator();
+            }
+
+        }
     }
 }
