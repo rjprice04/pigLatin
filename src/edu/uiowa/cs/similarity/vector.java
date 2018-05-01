@@ -8,14 +8,13 @@ package edu.uiowa.cs.similarity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 /**
  *
- * @author ryanprice
+ * @author Ryan Price
  */
 public class vector {
 
@@ -51,7 +50,6 @@ public class vector {
             keyWord = oneSentence.get(i);
             if (!this.vectorMap.containsKey(keyWord)) {
                 for (int j = 0; j < oneSentence.size(); j++) {
-                    // subMap = new HashMap();
                     subKeyWord = oneSentence.get(j);
                     if (!(keyWord.equals(subKeyWord))) {
                         subMap.put(subKeyWord, 1.0);
@@ -72,7 +70,6 @@ public class vector {
                     }
 
                 }
-                // this.vectorMap.put(keyWord, subMap);
             }
             
             if (!subMap.isEmpty()) {
@@ -102,53 +99,51 @@ public class vector {
             Collection<Double> valuesForPickedWord = new ArrayList();
             Collection<Double> valuesForOtherWords = new ArrayList();
 
-            subMapForUValues = this.vectorMap.get(word); //gets the map assiocated with the word they picked
-            valuesForPickedWord.addAll(subMapForUValues.values()); //gets the values for that map
-            Iterator u2Values = valuesForPickedWord.iterator(); //puts the values in an iterator
-            //Runs through the sentences that conatins the word U
-            while (u2Values.hasNext()) {
+            subMapForUValues = this.vectorMap.get(word); 
+            valuesForPickedWord.addAll(subMapForUValues.values()); 
+            Iterator u2Values = valuesForPickedWord.iterator(); 
+            
+            while (u2Values.hasNext()) { //Big O of S
 
-                tempValueU = (double) u2Values.next(); //gets the uSquared value
+                tempValueU = (double) u2Values.next(); 
                 uSquared += Math.pow(tempValueU, 2);
             }
-            //System.out.println(uSquared);
-            Iterator uValues = valuesForPickedWord.iterator(); //puts the values in an iterator
-            //Runs through the sentences that conatins the word U
-            while (uValues.hasNext()) { //still values to add
 
-                tempValueU = (double) uValues.next(); //the value we are looking at 
+            Iterator uValues = valuesForPickedWord.iterator(); 
+            while (uValues.hasNext()) { //Big O of S
 
-                subKeyValues = this.vectorMap.keySet(); //gets the keys of the vector map
-                Iterator subKeys = subKeyValues.iterator(); //puts the keys in an iterator
-                //Run through the other sentences
-                while (subKeys.hasNext()) { //looks at all the keys that
+                tempValueU = (double) uValues.next(); 
 
-                    subKeyWord = (String) subKeys.next(); //gets the next key in the list
+                subKeyValues = this.vectorMap.keySet(); 
+                Iterator subKeys = subKeyValues.iterator(); 
+
+                while (subKeys.hasNext()) { 
+
+                    subKeyWord = (String) subKeys.next();
                     Collection<String> currentKey = new ArrayList();
-                    subMapForVValues = this.vectorMap.get(subKeyWord); //gets the map for the the key we are looking at 
+                    subMapForVValues = this.vectorMap.get(subKeyWord); 
                     currentKey.addAll(subMapForUValues.keySet());
                     Iterator currentWords = currentKey.iterator();
-                    valuesForOtherWords.addAll(subMapForVValues.values()); //gets the values for that key
-                    Iterator vValues = valuesForOtherWords.iterator(); //puts those keys in an iterator
+                    valuesForOtherWords.addAll(subMapForVValues.values()); 
+                    Iterator vValues = valuesForOtherWords.iterator(); 
 
                     String currentWord = null;
 
-                    while (vValues.hasNext()) { //looks through all of the values
+                    while (vValues.hasNext()) { //Big O of J
                         if (currentWords.hasNext()) {
                             currentWord = currentWords.next().toString();
                         }
-                        tempValueV = (double) vValues.next(); //looks a the current v value
+                        tempValueV = (double) vValues.next(); 
 
                         vSquared += Math.pow(tempValueV, 2);
-                        if (subMapForUValues.containsKey(subKeyWord) && !currentWord.equals(subKeyWord)) { //sees if the subWord is in the U values sub map
-                            numerator += (tempValueU * tempValueV); //adds them to the numerator if the are
+                        if (subMapForUValues.containsKey(subKeyWord) && !currentWord.equals(subKeyWord)) { 
+                            numerator += (tempValueU * tempValueV); 
                         }
                     }
                     valuesForOtherWords.clear();
-                    denomiator = Math.sqrt(uSquared * vSquared);  //gets the denomiator
-                    cosValue = numerator / denomiator;  //gets the cosValue
-                    thatList.addOrder(subKeyWord, cosValue, number); //addeds to a list
-                    //System.out.println(cosValue);
+                    denomiator = Math.sqrt(uSquared * vSquared);  
+                    cosValue = numerator / denomiator; 
+                    thatList.addOrder(subKeyWord, cosValue, number); 
                     vSquared = 0;
                     numerator = 0;
 
@@ -164,4 +159,5 @@ public class vector {
             thatList.print(number);
        
     }
+    
 }
