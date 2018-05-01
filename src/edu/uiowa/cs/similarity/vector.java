@@ -99,12 +99,10 @@ public class vector {
             Set<String> subKeyValues;
             Map<String, Double> subMapForUValues;
             Map<String, Double> subMapForVValues;
-
             Collection<Double> valuesForPickedWord = new ArrayList();
             Collection<Double> valuesForOtherWords = new ArrayList();
 
             subMapForUValues = this.vectorMap.get(word); //gets the map assiocated with the word they picked
-            //Set<String> intersection = new HashSet<>(subMapForUValues.keySet());
             valuesForPickedWord.addAll(subMapForUValues.values()); //gets the values for that map
             Iterator u2Values = valuesForPickedWord.iterator(); //puts the values in an iterator
             //Runs through the sentences that conatins the word U
@@ -113,7 +111,7 @@ public class vector {
                 tempValueU = (double) u2Values.next(); //gets the uSquared value
                 uSquared += Math.pow(tempValueU, 2);
             }
-
+            //System.out.println(uSquared);
             Iterator uValues = valuesForPickedWord.iterator(); //puts the values in an iterator
             //Runs through the sentences that conatins the word U
             while (uValues.hasNext()) { //still values to add
@@ -126,27 +124,33 @@ public class vector {
                 while (subKeys.hasNext()) { //looks at all the keys that
 
                     subKeyWord = (String) subKeys.next(); //gets the next key in the list
+                    Collection<String> currentKey = new ArrayList();
                     subMapForVValues = this.vectorMap.get(subKeyWord); //gets the map for the the key we are looking at 
+                    currentKey.addAll(subMapForUValues.keySet());
+                    Iterator currentWords = currentKey.iterator();
                     valuesForOtherWords.addAll(subMapForVValues.values()); //gets the values for that key
                     Iterator vValues = valuesForOtherWords.iterator(); //puts those keys in an iterator
-                    String currentVWords;
-                    String currentUWords;
-                    while (vValues.hasNext()) { //looks through all of the values
-                        //numerator = 0;
-                        tempValueV = (double) vValues.next(); //looks a the current v value
-                        vSquared += Math.pow(tempValueV, 2);
-                        
-                        if (subMapForUValues.containsKey(subKeyWord)) { //sees if the subWord is in the U values sub map
-                            numerator += (tempValueU * tempValueV); //adds them to the numerator if the are
-                            //System.out.println(numerator);
-                        }
 
+                    String currentWord = null;
+
+                    while (vValues.hasNext()) { //looks through all of the values
+                        if (currentWords.hasNext()) {
+                            currentWord = currentWords.next().toString();
+                        }
+                        tempValueV = (double) vValues.next(); //looks a the current v value
+
+                        vSquared += Math.pow(tempValueV, 2);
+                        if (subMapForUValues.containsKey(subKeyWord) && !currentWord.equals(subKeyWord)) { //sees if the subWord is in the U values sub map
+                            numerator += (tempValueU * tempValueV); //adds them to the numerator if the are
+                        }
                     }
                     valuesForOtherWords.clear();
                     denomiator = Math.sqrt(uSquared * vSquared);  //gets the denomiator
                     cosValue = numerator / denomiator;  //gets the cosValue
-                    thatList.addOrder(subKeyWord, cosValue); //addeds to a list
+                    thatList.addOrder(subKeyWord, cosValue, number); //addeds to a list
+                    //System.out.println(cosValue);
                     vSquared = 0;
+                    numerator = 0;
 
                 }
 
@@ -156,8 +160,8 @@ public class vector {
             System.out.println("Cannot compute TopJ similarity to " + word);
 
         }
-
-        thatList.print(number);
-
+        
+            thatList.print(number);
+       
     }
 }
