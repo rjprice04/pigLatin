@@ -161,7 +161,7 @@ public class vector {
 
         }
 
-        thatList.print(number);
+        thatList.printCos(number);
 
     }
 
@@ -183,7 +183,7 @@ public class vector {
             double uSquared;
             double tempValueV;
             double vSquared;
-            double finalSquareRoot;
+            double eucDistance;
             double tempFinalValue = 0;
             while (subKeys.hasNext()) {
                 subKeyWord = (String) subKeys.next();
@@ -197,10 +197,10 @@ public class vector {
                     vSquared = Math.pow(tempValueV, 2);
                     tempFinalValue = (uSquared - vSquared) + tempFinalValue;
                 }
-                finalSquareRoot = Math.sqrt(tempFinalValue);
-                finalValues.addOrderSmaller(subKeyWord, -finalSquareRoot, number);
+                eucDistance = Math.sqrt(tempFinalValue);
+                finalValues.addOrderSmaller(subKeyWord, number, -eucDistance);
             }
         }
-        finalValues.print(number);
+        finalValues.printEuc(number);
     }
 }
