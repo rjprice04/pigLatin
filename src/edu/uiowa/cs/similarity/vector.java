@@ -166,6 +166,7 @@ public class vector {
     }
 
     void computeEucDistance(String word, int number) {
+        OrderedLinkedList finalValues = new OrderedLinkedList();
         if (this.vectorMap.containsKey(word)) {
             Map<String, Double> subMapForUValues;
             Set<String> subKeyValues;
@@ -178,13 +179,28 @@ public class vector {
             valuesForPickedWord.addAll(subMapForUValues.values());
             Iterator uValues = valuesForPickedWord.iterator();
             String subKeyWord;
+            double tempValueU;
+            double uSquared;
+            double tempValueV;
+            double vSquared;
+            double finalSquareRoot;
+            double tempFinalValue = 0;
             while (subKeys.hasNext()) {
                 subKeyWord = (String) subKeys.next();
                 subMapForVValues = this.vectorMap.get(subKeyWord);
                 valuesForOtherWords.addAll(subMapForVValues.values()); //gets the values for that key
                 Iterator vValues = valuesForOtherWords.iterator();
+                while (uValues.hasNext() && vValues.hasNext()) {
+                    tempValueU = (double) uValues.next();
+                    tempValueV = (double) vValues.next();
+                    uSquared = Math.pow(tempValueU, 2);
+                    vSquared = Math.pow(tempValueV, 2);
+                    tempFinalValue = (uSquared - vSquared) + tempFinalValue;
+                }
+                finalSquareRoot = Math.sqrt(tempFinalValue);
+                finalValues.addOrderSmaller(subKeyWord, -finalSquareRoot, number);
             }
-
         }
+        finalValues.print(number);
     }
 }
