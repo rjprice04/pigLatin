@@ -156,7 +156,7 @@ public class vector {
 
         }
 
-        thatList.print(number);
+        thatList.printCos(number);
 
     }
 
@@ -168,35 +168,65 @@ public class vector {
             Map<String, Double> subMapForVValues;
             Collection<Double> valuesForPickedWord = new ArrayList();
             Collection<Double> valuesForOtherWords = new ArrayList();
+            Collection<String> currentKey = new HashSet<>();
             subMapForUValues = this.vectorMap.get(word);
             subKeyValues = this.vectorMap.keySet();
             Iterator subKeys = subKeyValues.iterator();
-            valuesForPickedWord.addAll(subMapForUValues.values());
-            Iterator uValues = valuesForPickedWord.iterator();
             String subKeyWord;
-            double tempValueU;
-            double uSquared;
-            double tempValueV;
-            double vSquared;
-            double finalSquareRoot;
+            double tempValueU = 0;
+            double tempValueV = 0;
+            double tempDifference = 0;
+            double eucDistance;
             double tempFinalValue = 0;
+            String currentWord = null;
             while (subKeys.hasNext()) {
                 subKeyWord = (String) subKeys.next();
                 subMapForVValues = this.vectorMap.get(subKeyWord);
                 valuesForOtherWords.addAll(subMapForVValues.values()); //gets the values for that key
                 Iterator vValues = valuesForOtherWords.iterator();
-                while (uValues.hasNext() && vValues.hasNext()) {
-                    tempValueU = (double) uValues.next();
-                    tempValueV = (double) vValues.next();
-                    uSquared = Math.pow(tempValueU, 2);
-                    vSquared = Math.pow(tempValueV, 2);
-                    tempFinalValue = (uSquared - vSquared) + tempFinalValue;
+                valuesForPickedWord.addAll(subMapForUValues.values());
+                Iterator uValues = valuesForPickedWord.iterator();
+                currentKey.addAll(subMapForUValues.keySet());
+                currentKey.addAll(subMapForVValues.keySet());
+                Iterator currentWords = currentKey.iterator();
+                while (uValues.hasNext() && vValues.hasNext() && currentWords.hasNext()) {
+                    currentWord = currentWords.next().toString();
+                    if (subMapForUValues.containsKey(currentWord) && subMapForVValues.containsKey(currentWord)) {
+                        if (uValues.hasNext()) {
+                            tempValueU = (double) uValues.next();
+                        }
+                        if (vValues.hasNext()) {
+                            tempValueV = (double) vValues.next();
+                        }
+                        tempDifference = tempValueU - tempValueV;
+                        if (tempDifference > 0) {
+                            tempFinalValue = Math.pow(tempDifference, 2) + tempFinalValue;
+                        } else {
+                            tempFinalValue = tempFinalValue - Math.pow(tempDifference, 2);
+                        }
+                    } else if (subMapForUValues.containsKey(currentWord) && !subMapForVValues.containsKey(currentWord)) {
+                        if (uValues.hasNext()) {
+                            tempValueU = (double) uValues.next();
+                        }
+                        tempFinalValue = Math.pow((tempValueU - 0), 2) + tempFinalValue;
+                    } else if (!subMapForUValues.containsKey(currentWord) && subMapForVValues.containsKey(currentWord)) {
+                        if (vValues.hasNext()) {
+                            tempValueV = (double) vValues.next();
+                        }
+                        tempFinalValue = tempFinalValue - Math.pow((0 - tempValueV), 2);
+                    }
                 }
-                finalSquareRoot = Math.sqrt(tempFinalValue);
-                finalValues.addOrderSmaller(subKeyWord, -finalSquareRoot, number);
+                if (tempFinalValue < 0) {
+                    tempFinalValue = -tempFinalValue;
+                }
+                eucDistance = Math.sqrt(tempFinalValue);
+                finalValues.addOrderSmaller(subKeyWord, -eucDistance, number);
+                tempFinalValue = 0;
             }
+        } else {
+            System.out.println("Cannot compute TopJ similarity to " + word);
         }
-        finalValues.print(number);
+        finalValues.printEuc(number);
     }
     
 }
