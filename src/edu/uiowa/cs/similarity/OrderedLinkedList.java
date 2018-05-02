@@ -34,7 +34,22 @@ public class OrderedLinkedList extends LinkedList {
             wordsInList.add(word);
         }
     }
-
+    void addOrderSmaller(String word, double value, int length) {
+        ListNode current = header;
+        ListNode temp;
+        ListNode newNode = new ListNode(word, value);
+        int count=0;
+        if(!wordsInList.contains(word)){
+            while (current.next != null && current.getCosValue() <= value && count<length) {
+                current = current.next;
+                count++;
+            }
+            temp = current.next;
+            current.next = newNode;
+            newNode.next = temp;
+            wordsInList.add(word);
+        }
+    }
     public void print(int num) {
         if(header.next == null){
             return;
@@ -43,11 +58,11 @@ public class OrderedLinkedList extends LinkedList {
         int i = 0;
         System.out.print("[");
         while (current.next != null && i < num) {
-            System.out.print("Pair{" + current.getWord() + ", " + current.getCosValue() + "}");
+            System.out.print(" Pair{" + current.getWord() + ", " + current.getCosValue() + "}");
             current = current.next;
             i++;
         }
-        System.out.print("]");
+        System.out.print(" ]");
         System.out.println();
     }
 
