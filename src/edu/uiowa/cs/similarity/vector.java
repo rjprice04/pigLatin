@@ -182,7 +182,8 @@ public class vector {
             double tempDifference = 0;
             double eucDistance;
             double tempFinalValue = 0;
-            String currentWord;
+            String currentWord = null;
+
             while (subKeys.hasNext()) {
                 subKeyWord = (String) subKeys.next();
                 subMapForVValues = this.vectorMap.get(subKeyWord);
@@ -224,7 +225,9 @@ public class vector {
                     tempFinalValue = -tempFinalValue;
                 }
                 eucDistance = Math.sqrt(tempFinalValue);
-                finalValues.addOrderSmaller(subKeyWord, number, -eucDistance);
+                if (!word.equals(subKeyWord)) {
+                    finalValues.addOrderEuc(subKeyWord, -eucDistance, number);
+                }
                 tempFinalValue = 0;
             }
         } else {
@@ -232,21 +235,105 @@ public class vector {
         }
         finalValues.printEuc(number);
     }
-    
-    
-    void kMeanClustering(int kMeans, int iter){
-        ArrayList means= new ArrayList();
-        Random rand = new Random();
-        Set<String> keyValues;
-        for(int i=0; i<kMeans;i++){
-            means.add(rand.nextInt(kMeans+1)); //get k random values
+
+    void computeNormEuc(String word, int number) {
+        OrderedLinkedList finalNormValues = new OrderedLinkedList();
+        if (this.vectorMap.containsKey(word)) {
+            Map<String, Double> subMapForUValues;
+            Set<String> subKeyValues;
+            Map<String, Double> subMapForVValues;
+            Collection<Double> valuesForPickedWord = new ArrayList();
+            Collection<Double> valuesForOtherWords = new ArrayList();
+            Collection<String> currentKey = new HashSet<>();
+            subMapForUValues = this.vectorMap.get(word);
+            subKeyValues = this.vectorMap.keySet();
+            Iterator subKeys = subKeyValues.iterator();
+            String subKeyWord;
+            double tempValueU;
+            double tempValueV;
+            double tempDifference = 0;
+            double eucNormDistance;
+            double tempFinalValue = 0;
+            String currentWord;
+            double squareUValue = getUSquared(word);
+            double squareVValue = 0;
+//            valuesForPickedWord.addAll(subMapForUValues.values());
+//            Iterator u2Values = valuesForPickedWord.iterator(); //puts the values in an iterator
+//
+//            while (u2Values.hasNext()) {
+//                tempValueU = (double) u2Values.next(); //gets the uSquared value
+//                squareUValue += Math.pow(tempValueU, 2);
+//            }
+            squareUValue = Math.sqrt(squareUValue);
+            while (subKeys.hasNext()) {
+                subKeyWord = (String) subKeys.next();
+                subMapForVValues = this.vectorMap.get(subKeyWord);
+                valuesForOtherWords.addAll(subMapForVValues.values()); //gets the values for that key
+                Iterator vValues = valuesForOtherWords.iterator();
+                Iterator uValues = valuesForPickedWord.iterator();
+                Iterator v2Values = valuesForOtherWords.iterator(); //puts the values in an iterator
+                currentKey.addAll(subMapForUValues.keySet());
+                currentKey.addAll(subMapForVValues.keySet());
+                Iterator currentWords = currentKey.iterator();
+                squareVValue = 0;
+                tempValueV = 0;
+                tempValueU = 0;
+                while (v2Values.hasNext()) {
+                    tempValueV = (double) v2Values.next();
+                    squareVValue += Math.pow(tempValueV, 2);
+                }
+                squareVValue = Math.sqrt(squareVValue);
+                while (uValues.hasNext() && vValues.hasNext() && currentWords.hasNext()) {
+                    currentWord = currentWords.next().toString();
+                    if (subMapForUValues.containsKey(currentWord) && subMapForVValues.containsKey(currentWord)) {
+                        if (uValues.hasNext()) {
+                            tempValueU = (double) uValues.next();
+                        }
+                        if (vValues.hasNext()) {
+                            tempValueV = (double) vValues.next();
+                        }
+                        tempValueU = tempValueU / squareUValue;
+                        tempValueV = tempValueV / squareVValue;
+                        tempDifference = tempValueU - tempValueV;
+                        if (tempDifference > 0) {
+                            tempFinalValue = Math.pow(tempDifference, 2) + tempFinalValue;
+                        } else {
+                            tempFinalValue = tempFinalValue - Math.pow(tempDifference, 2);
+                        }
+                    } else if (subMapForUValues.containsKey(currentWord) && !subMapForVValues.containsKey(currentWord)) {
+                        if (uValues.hasNext()) {
+                            tempValueU = (double) uValues.next();
+                        }
+                        tempValueU = tempValueU / squareUValue;
+                        tempFinalValue = Math.pow((tempValueU - 0), 2) + tempFinalValue;
+                    } else if (!subMapForUValues.containsKey(currentWord) && subMapForVValues.containsKey(currentWord)) {
+                        if (vValues.hasNext()) {
+                            tempValueV = (double) vValues.next();
+                        }
+                        tempValueV = tempValueV / squareVValue;
+                        tempFinalValue = tempFinalValue - Math.pow((0 - tempValueV), 2);
+                    }
+                }
+                if (tempFinalValue < 0) {
+                    tempFinalValue = -tempFinalValue;
+                }
+                eucNormDistance = Math.sqrt(tempFinalValue);
+                if (!word.equals(subKeyWord)) {
+                    finalNormValues.addOrderEucNorm(subKeyWord, -eucNormDistance, number);
+                }
+                tempFinalValue = 0;
+            }
+        } else {
+            System.out.println("Cannot compute TopJ similarity to " + word);
         }
-        ArrayList cluster = new ArrayList();
-        keyValues = this.vectorMap.keySet(); 
-        Iterator subKeys = keyValues.iterator(); 
-        while(subKeys.hasNext()){
- 
-        }
+        finalNormValues.printEucNorm(number);
     }
 
+    void kMeanClustering(int kMean, int iter) {
+        ArrayList means = new ArrayList();
+        Random rand = new Random();
+        for(int i=0;i<kMean;i++){
+            means.add(rand.nextInt(kMean+1));
+        }
+    }
 }
