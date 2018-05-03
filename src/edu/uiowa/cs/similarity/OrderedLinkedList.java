@@ -11,18 +11,20 @@ import java.util.Set;
 
 public class OrderedLinkedList extends LinkedList {
 
+    private int size;
     private ListNode header;
-    private Set wordsInList;
+    private Set<String> wordsInList;
 
     public OrderedLinkedList() {
-        header = new ListNode(null, 0, 0);
+        header = new ListNode(null, 0, 0, 0);
         wordsInList = new HashSet();
+        size = 0;
     }
 
     void addOrder(String word, double value, int length) {
         ListNode current = header;
         ListNode temp;
-        ListNode newNode = new ListNode(word, value, 0);
+        ListNode newNode = new ListNode(word, value, 0, 0);
         int count = 0;
         if (!wordsInList.contains(word)) {
             while (current.next != null && current.getCosValue() >= value && count < length) {
@@ -33,16 +35,17 @@ public class OrderedLinkedList extends LinkedList {
             current.next = newNode;
             newNode.next = temp;
             wordsInList.add(word);
+            size++;
         }
     }
 
-    void addOrderSmaller(String word, int length, double value) {
+    void addOrderEuc(String word, double value, int length) {
         ListNode current = header;
         ListNode temp;
-        ListNode newNode = new ListNode(word, 0, value);
+        ListNode newNode = new ListNode(word, 0, value, 0);
         int count = 0;
         if (!wordsInList.contains(word)) {
-            while (current.next != null && current.getEucValue() <= value && count < length) {
+            while (current.next != null && value <= current.next.getEucValue() && count < length) {
                 current = current.next;
                 count++;
             }
@@ -50,6 +53,26 @@ public class OrderedLinkedList extends LinkedList {
             current.next = newNode;
             newNode.next = temp;
             wordsInList.add(word);
+            size++;
+        }
+    }
+
+    void addOrderEucNorm(String word, double value, int length) {
+        ListNode current = header;
+        ListNode temp;
+        ListNode newNode = new ListNode(word, 0, 0, value);
+        newNode.setEucNormValue(value);
+        int count = 0;
+        if (!wordsInList.contains(word)) {
+            while (current.next != null && value <= current.next.getEucNormValue() && count < length) {
+                current = current.next;
+                count++;
+            }
+            temp = current.next;
+            current.setNext(newNode);
+            newNode.next = temp;
+            wordsInList.add(word);
+            size++;
         }
     }
 
@@ -78,6 +101,22 @@ public class OrderedLinkedList extends LinkedList {
         System.out.print("[");
         while (current.next != null && i < num) {
             System.out.print(" Pair{" + current.getWord() + ", " + current.getEucValue() + "}");
+            i++;
+            current = current.next;
+        }
+        System.out.print(" ]");
+        System.out.println();
+    }
+
+    public void printEucNorm(int num) {
+        if (header.next == null) {
+            return;
+        }
+        ListNode current = header.next;
+        int i = 0;
+        System.out.print("[");
+        while (current.next != null && i < num) {
+            System.out.print(" Pair{" + current.getWord() + ", " + current.getEucNormValue() + "}");
             current = current.next;
             i++;
         }
@@ -89,13 +128,15 @@ public class OrderedLinkedList extends LinkedList {
 
         private double cosValue;
         private double eucValue;
+        private double eucNorm;
         private String word;
         private ListNode next;
 
-        public ListNode(String w, double d, double e) {
-            cosValue = d;
+        public ListNode(String w, double cos, double euc, double norm) {
+            cosValue = cos;
             word = w;
-            eucValue = e;
+            eucValue = euc;
+            eucNorm = norm;
         }
 
         public double getCosValue() {
@@ -112,6 +153,14 @@ public class OrderedLinkedList extends LinkedList {
 
         public void setEucValue(double data) {
             this.eucValue = data;
+        }
+
+        public double getEucNormValue() {
+            return this.eucNorm;
+        }
+
+        public void setEucNormValue(double data) {
+            this.eucNorm = data;
         }
 
         public void setNext(ListNode next) {
