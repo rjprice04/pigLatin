@@ -45,7 +45,7 @@ public class OrderedLinkedList extends LinkedList {
         ListNode newNode = new ListNode(word, 0, value, 0);
         int count = 0;
         if (!wordsInList.contains(word)) {
-            while (current.next != null && current.getEucValue() >= value && count < length) {
+            while (current.next != null && value <= current.next.getEucValue() && count < length) {
                 current = current.next;
                 count++;
             }
@@ -61,14 +61,15 @@ public class OrderedLinkedList extends LinkedList {
         ListNode current = header;
         ListNode temp;
         ListNode newNode = new ListNode(word, 0, 0, value);
+        newNode.setEucNormValue(value);
         int count = 0;
         if (!wordsInList.contains(word)) {
-            while (current.next != null && current.getEucNormValue() >= value && count < length) {
+            while (current.next != null && value <= current.next.getEucNormValue() && count < length) {
                 current = current.next;
                 count++;
             }
             temp = current.next;
-            current.next = newNode;
+            current.setNext(newNode);
             newNode.next = temp;
             wordsInList.add(word);
             size++;
@@ -100,8 +101,8 @@ public class OrderedLinkedList extends LinkedList {
         System.out.print("[");
         while (current.next != null && i < num) {
             System.out.print(" Pair{" + current.getWord() + ", " + current.getEucValue() + "}");
-            current = current.next;
             i++;
+            current = current.next;
         }
         System.out.print(" ]");
         System.out.println();
