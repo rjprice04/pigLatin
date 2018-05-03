@@ -19,6 +19,8 @@ public class Main {
         System.out.println("sentences - Prints the sentences and number of sentences");
         System.out.println("vectors - Prints the vectors");
         System.out.println("topj- Input: Word(Q) and number(J). Find the J most simalar words to Q");
+        System.out.println("within topj: euc: Word(Q) and number(J). Find the euclidean distance of two vectors.");
+        System.out.println("within topj: eucnorm: Word(Q) and number(J). Find the normal euclidean distance of two vectors");
     }
 
     private static Set getStopWords() throws FileNotFoundException {
