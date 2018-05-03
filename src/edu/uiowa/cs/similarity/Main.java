@@ -117,12 +117,22 @@ public class Main {
                     aVector.computeEucDistance(word, number);
                 } else if(choiceWord.equals("eucnorm")){
                     
-                } else if(choiceWord.equals("cosine")) {
+                } else if(choiceWord.equals("cosine") || choiceWord.equals("")) {
                     aVector.computeTopJ(word, number);
                 } else{
                     aVector.computeTopJ(word, number);
                 }
-            } else {
+            } 
+            else if(command.equals("kmean")){
+                System.out.println("What k do you want to use?");
+                Scanner reader = new Scanner(System.in);  // Reading from System.in
+                int kMean = reader.nextInt();
+                System.out.println("How many iterations?");
+                int iter = reader.nextInt();
+                aVector.kMeanClustering(kMean, iter);
+            }
+                
+            else {
                 System.err.println("Unrecognized command");
             }
         }
