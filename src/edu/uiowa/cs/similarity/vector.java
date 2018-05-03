@@ -8,8 +8,10 @@ package edu.uiowa.cs.similarity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -33,14 +35,6 @@ public class vector {
     }
 
     void addToMap(ArrayList<String> oneSentence) {
-        /**
-         * ***
-         * Step 1 get a word for the key Step 2: add the values for the subMap
-         * get subWordKey get sub word value Step 3 put keyWord and subMap
-         * together
-         *
-         * index ../cleanup_test.txt index ../vector_test.txt *****
-         */
 
         String keyWord;
         Map<String, Double> subMap = new HashMap();
@@ -80,12 +74,30 @@ public class vector {
             }
         }
     }
+    
+    double getUSquared(String word){
+        double uSquared=0;
+        double tempValueU;
+        Map<String, Double> subMapForUValues;
+        subMapForUValues = this.vectorMap.get(word); 
+        Collection<Double> valuesForPickedWord = new ArrayList();
+        valuesForPickedWord.addAll(subMapForUValues.values()); 
+        Iterator u2Values = valuesForPickedWord.iterator(); 
+            
+        while (u2Values.hasNext()) { //Big O of S
 
+            tempValueU = (double) u2Values.next(); 
+            uSquared += Math.pow(tempValueU, 2);
+        }
+
+        return uSquared;
+    }
+    
     void computeTopJ(String word, int number) {
         OrderedLinkedList thatList = new OrderedLinkedList();
         if (this.vectorMap.containsKey(word)) {
 
-            double uSquared = 0;
+            double uSquared = getUSquared(word);
             double vSquared = 0;
             double numerator = 0;
             double denomiator;
@@ -100,16 +112,8 @@ public class vector {
             Collection<Double> valuesForOtherWords = new ArrayList();
 
             subMapForUValues = this.vectorMap.get(word); 
-            valuesForPickedWord.addAll(subMapForUValues.values()); 
-            Iterator u2Values = valuesForPickedWord.iterator(); 
-            
-            while (u2Values.hasNext()) { //Big O of S
-
-                tempValueU = (double) u2Values.next(); 
-                uSquared += Math.pow(tempValueU, 2);
-            }
-
             Iterator uValues = valuesForPickedWord.iterator(); 
+            
             while (uValues.hasNext()) { //Big O of S
 
                 tempValueU = (double) uValues.next(); 
@@ -178,7 +182,7 @@ public class vector {
             double tempDifference = 0;
             double eucDistance;
             double tempFinalValue = 0;
-            String currentWord = null;
+            String currentWord;
             while (subKeys.hasNext()) {
                 subKeyWord = (String) subKeys.next();
                 subMapForVValues = this.vectorMap.get(subKeyWord);
@@ -220,7 +224,7 @@ public class vector {
                     tempFinalValue = -tempFinalValue;
                 }
                 eucDistance = Math.sqrt(tempFinalValue);
-                finalValues.addOrderSmaller(subKeyWord, -eucDistance, number);
+                finalValues.addOrderSmaller(subKeyWord, number, -eucDistance);
                 tempFinalValue = 0;
             }
         } else {
@@ -229,4 +233,20 @@ public class vector {
         finalValues.printEuc(number);
     }
     
+    
+    void kMeanClustering(int kMeans, int iter){
+        ArrayList means= new ArrayList();
+        Random rand = new Random();
+        Set<String> keyValues;
+        for(int i=0; i<kMeans;i++){
+            means.add(rand.nextInt(kMeans+1)); //get k random values
+        }
+        ArrayList cluster = new ArrayList();
+        keyValues = this.vectorMap.keySet(); 
+        Iterator subKeys = keyValues.iterator(); 
+        while(subKeys.hasNext()){
+ 
+        }
+    }
+
 }
