@@ -20,7 +20,16 @@ public class OrderedLinkedList extends LinkedList {
         wordsInList = new HashSet();
         size = 0;
     }
-
+    public double getNodeEucDistance(int index){
+        ListNode current = header;
+        int count = 0;
+        while(current != null){
+            if(index == count){
+                return current.getEucValue();
+            }
+        }
+        return 0;
+    }
     void addOrder(String word, double value, int length) {
         ListNode current = header;
         ListNode temp;
