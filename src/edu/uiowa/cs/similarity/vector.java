@@ -321,31 +321,4 @@ public class vector {
         }
         finalNormValues.printEucNorm(number);
     }
-
-    void kMeanClustering(int kMean, int iter) {
-        ArrayList means = new ArrayList();
-        Random rand = new Random();
-        double min=Double.MAX_VALUE;
-        int clusterNum;
-        double temp;
-        double value=0;
-        
-        for(int i=0;i<kMean;i++){
-            means.add(rand.nextInt(kMean+1));
-        }
-        for(int i=0; i<iter; i++){
-            
-            for(int j=0; j<means.size();j++){
-                //some math needs to find value using computeEucDistance
-                temp=Math.abs((double)means.get(i)-value);
-                if(temp<min){
-                    min=temp;
-                    clusterNum=i;
-                }
-                //add word to the cluster with that number 
-            }
-        }
-    
-    
-    }
 }
