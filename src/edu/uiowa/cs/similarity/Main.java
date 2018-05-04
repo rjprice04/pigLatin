@@ -131,7 +131,7 @@ public class Main {
                 int kMean = reader.nextInt();
                 System.out.println("How many iterations?");
                 int iter = reader.nextInt();
-                aVector.kMeanClustering(kMean, iter);
+                
             }
                 
             else {
