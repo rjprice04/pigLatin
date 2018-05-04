@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
+
 import java.util.Set;
 
 /**
@@ -105,32 +105,33 @@ public class vector {
             double tempValueU;
             double tempValueV;
             String subKeyWord;
-            Set<String> subKeyValues;
+
             Map<String, Double> subMapForUValues;
-            Map<String, Double> subMapForVValues;
-            Collection<Double> valuesForPickedWord = new ArrayList();
+
+            
             Collection<Double> valuesForOtherWords = new ArrayList();
 
             subMapForUValues = this.vectorMap.get(word); 
-            Iterator uValues = valuesForPickedWord.iterator(); 
+
+            Iterator uValues = this.vectorMap.get(word).values().iterator(); 
             
             while (uValues.hasNext()) { //Big O of S
 
                 tempValueU = (double) uValues.next(); 
 
-                subKeyValues = this.vectorMap.keySet(); 
-                Iterator subKeys = subKeyValues.iterator(); 
+
+                Iterator subKeys = this.vectorMap.keySet().iterator();
 
                 while (subKeys.hasNext()) { 
 
                     subKeyWord = (String) subKeys.next();
                     Collection<String> currentKey = new ArrayList();
-                    subMapForVValues = this.vectorMap.get(subKeyWord); 
+
                     currentKey.addAll(subMapForUValues.keySet());
                     Iterator currentWords = currentKey.iterator();
-                    valuesForOtherWords.addAll(subMapForVValues.values()); 
-                    Iterator vValues = valuesForOtherWords.iterator(); 
+                    
 
+                    Iterator vValues = this.vectorMap.get(subKeyWord).values().iterator();
                     String currentWord = null;
 
                     while (vValues.hasNext()) { //Big O of J
@@ -168,14 +169,15 @@ public class vector {
         OrderedLinkedList finalValues = new OrderedLinkedList();
         if (this.vectorMap.containsKey(word)) {
             Map<String, Double> subMapForUValues;
-            Set<String> subKeyValues;
+            //Set<String> subKeyValues;
             Map<String, Double> subMapForVValues;
             Collection<Double> valuesForPickedWord = new ArrayList();
             Collection<Double> valuesForOtherWords = new ArrayList();
             Collection<String> currentKey = new HashSet<>();
             subMapForUValues = this.vectorMap.get(word);
-            subKeyValues = this.vectorMap.keySet();
-            Iterator subKeys = subKeyValues.iterator();
+            //subKeyValues = this.vectorMap.keySet();
+            Iterator subKeys = this.vectorMap.keySet().iterator();
+            //Iterator subKeys = subKeyValues.iterator();
             String subKeyWord;
             double tempValueU = 0;
             double tempValueV = 0;
@@ -187,8 +189,9 @@ public class vector {
             while (subKeys.hasNext()) {
                 subKeyWord = (String) subKeys.next();
                 subMapForVValues = this.vectorMap.get(subKeyWord);
-                valuesForOtherWords.addAll(subMapForVValues.values()); //gets the values for that key
-                Iterator vValues = valuesForOtherWords.iterator();
+
+                Iterator vValues =this.vectorMap.get(subKeyWord).values().iterator();
+                
                 valuesForPickedWord.addAll(subMapForUValues.values());
                 Iterator uValues = valuesForPickedWord.iterator();
                 currentKey.addAll(subMapForUValues.keySet());
@@ -240,14 +243,14 @@ public class vector {
         OrderedLinkedList finalNormValues = new OrderedLinkedList();
         if (this.vectorMap.containsKey(word)) {
             Map<String, Double> subMapForUValues;
-            Set<String> subKeyValues;
+            //Set<String> subKeyValues;
             Map<String, Double> subMapForVValues;
             Collection<Double> valuesForPickedWord = new ArrayList();
             Collection<Double> valuesForOtherWords = new ArrayList();
             Collection<String> currentKey = new HashSet<>();
             subMapForUValues = this.vectorMap.get(word);
-            subKeyValues = this.vectorMap.keySet();
-            Iterator subKeys = subKeyValues.iterator();
+            //subKeyValues = this.vectorMap.keySet();
+            Iterator subKeys = this.vectorMap.keySet().iterator();//subKeyValues.iterator();
             String subKeyWord;
             double tempValueU;
             double tempValueV;
