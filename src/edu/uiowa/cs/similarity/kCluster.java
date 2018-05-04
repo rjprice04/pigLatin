@@ -105,47 +105,57 @@ public class kCluster {
                 // Don't add the mean to the cluster
 //                if (!means[closestMeansIndex].getList().getNodeEucDistance(0).getWord().equals(pointBaseEntry.getKey()))
 //                {
-//                    HashMap<String, Double> cluster = clusters.get(closestMeansIndex);
-//                    cluster.put(pointBaseEntry.getKey(), closestEucDist);
-//                    sumOfDistances += closestEucDist;
-//                    numberOfPoints++;
+                    Map<String, Double> cluster = clusters.get(closestMeansIndex);
+                    cluster.put(pointBaseEntry.getKey(), closestEucDist);
+                    sumOfDistances += closestEucDist;
+                    numberOfPoints++;
 //                }
             }
+            System.out.println("Iteration " + iterCount + ":");
+            System.out.println("Average Euclidean Distance: " + sumOfDistances/numberOfPoints);
+            for (int clusterIndex=0; clusterIndex<clusters.size(); clusterIndex++)
+            {
+//                System.out.println();
+                
+                System.out.println("Cluster " + (clusterIndex+1) + " with mean node " + means[clusterIndex].getWord());
             
+                for (Map.Entry<String, Double> entry: clusters.get(clusterIndex).entrySet())
+                {
+                    System.out.print("\t" + entry.getKey() + ": " + entry.getValue());
+                }
+                System.out.println();
+                
+            }
+            System.out.println();
+            System.out.println();
 //            String str = "";
             for(int i = 0; i < means.length; i++){
-                HashMap<String, Double> clusterCopy = new HashMap<String, Double>();
-                clusterCopy=(HashMap) clusters.get(i).clone();
-//                double centroid = centroidFinder(clusters.get(i));
-//                String str = calculateNewMeans(clusters.get(i),centroid, means[i].getWord());
-//                if(!str.equals(means[i].getWord())){                    
-//                    Vector vec = new Vector(words,str);
-//                    means[i] = vec;
-//                    
-//                }    
+                Map<String, Double> clusterCopy = new HashMap<String, Double>();
+                clusterCopy=(Map) clusters.get(i).clone();
+                double centroid = centroidFinder(clusters.get(i));
+                String str = calculateNewMeans(clusters.get(i),centroid, means[i].getWord());
+                if(!str.equals(means[i].getWord())){                    
+                    vector vec = new vector(words,str);
+                    means[i] = vec;
+                    
+                }    
                 if (clusterCopy.isEmpty() || clusterCopy.size() == 1)
                 {
-                    // If a cluster is empty or holds just its mean, it needs a better mean.  Randomly select another mean.
-                    // Note* this wasn't listed as part of the assignment, but it just seemed to be a better way to find clusters
-                    Random generatorRand = new Random();
+                    // If a cluster is empty, it needs a better mean.  Randomly select another mean.
+                    Random rand2 = new Random();
                     // Make an array of words we have to choose from
                     Object[] keyWordsSet = vector.keySet().toArray();
-                    String baseWordFill = (String) keyWordsSet[generatorRand.nextInt(keyWordsSet.length)];
+                    String baseWordFill = (String) keyWordsSet[rand2.nextInt(keyWordsSet.length)];
                     // Fill means with k number of random Vectors
-                   // means[i] = new Vector(words, baseWordFill);
+                    means[i] = new vector(words, baseWordFill);
                 }
-            }
-        
-            if (iterCount == iters)
-            {
-                // Fill the final arraylist with pairs of vectors and hashmaps(the hashmaps hold individual clusters)
-                
-                for (int i=0; i<clusters.size(); i++)
+                else 
                 {
-                    toReturn.add(new Pair(means[i], clusters.get(i)));
+//                    System.out.println("not changing the base word.");
+                    means[i] = means[i];
                 }
             }
         }
-        return toReturn;
-    }  
+    }
+
 }
