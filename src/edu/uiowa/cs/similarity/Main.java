@@ -127,6 +127,7 @@ public class Main {
                 }
             } 
             else if(command.equals("kmean")){
+                
                 System.out.println("What k do you want to use?");
                 Scanner reader = new Scanner(System.in);  // Reading from System.in
                 int kMean = reader.nextInt();
