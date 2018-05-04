@@ -71,6 +71,7 @@ public class Main {
                 String sentence;
                 while (sc.hasNext()) {
                     //read in a sentence
+                   // ArrayList<String> cleanedInput = sc.next()(a.toLowerCase());
                     sentence = sc.next().toLowerCase();
                     Scanner sw = new Scanner(sentence);
                     while (sw.hasNext()) {
