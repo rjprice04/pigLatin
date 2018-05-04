@@ -69,6 +69,7 @@ public class Main {
                 PorterStemmer porterStemmer = new PorterStemmer();
                 String word;
                 String sentence;
+
                 while (sc.hasNext()) {
                     //read in a sentence
                    // ArrayList<String> cleanedInput = sc.next()(a.toLowerCase());
