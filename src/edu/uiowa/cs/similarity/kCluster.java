@@ -32,6 +32,26 @@ public class kCluster {
         this.words = words;
         eucList.add(temp.getList());
     }
+    private double centroidFinder(HashMap<String,Double> clusterMap){
+        
+        if (!clusterMap.isEmpty()){
+               double soFar = 0;
+            Iterator<HashMap.Entry<String,Double>> it = clusterMap.entrySet().iterator();
+
+            while(it.hasNext()){
+
+                soFar += it.next().getValue();
+            }
+            
+
+            return soFar/clusterMap.size();
+            
+           
+        }
+        else{
+            return 0;
+        }
+    }
 
     private String calculateMean(Map<String, Double> clusters, double centroid, String word) {
         String output = word;
