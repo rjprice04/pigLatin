@@ -254,10 +254,10 @@ public class vector {
             Map<String, Double> subMapForUValues;
             Set<String> subKeyValues;
             Map<String, Double> subMapForVValues;
-            Collection<Double> valuesForPickedWord;
+            Collection<Double> valuesForPickedWord = new ArrayList();
             
             subMapForUValues=this.vectorMap.get(word);
-            valuesForPickedWord=subMapForUValues.values();
+           // valuesForPickedWord=subMapForUValues.values();
             
             Collection<Double> valuesForOtherWords = new ArrayList();
             Collection<String> currentKey = new HashSet<>();
