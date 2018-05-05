@@ -256,7 +256,11 @@ public class vector {
             Map<String, Double> subMapForUValues;
             Set<String> subKeyValues;
             Map<String, Double> subMapForVValues;
-            Collection<Double> valuesForPickedWord = new ArrayList();
+            Collection<Double> valuesForPickedWord;
+            
+            subMapForUValues=this.vectorMap.get(word);
+            valuesForPickedWord=subMapForUValues.values();
+            
             Collection<Double> valuesForOtherWords = new ArrayList();
             Collection<String> currentKey = new HashSet<>();
             subMapForUValues = this.vectorMap.get(word);
@@ -273,7 +277,7 @@ public class vector {
             double squareVValue = 0;
 
             while (subKeys.hasNext()) {
-                subKeyWord = (String) subKeys.next();
+                subKeyWord = subKeys.next().toString();
                 subMapForVValues = this.vectorMap.get(subKeyWord);
                 valuesForOtherWords.addAll(subMapForVValues.values()); //gets the values for that key
                 Iterator vValues = valuesForOtherWords.iterator();
