@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import javafx.util.Pair;
 
 /**
  *
@@ -30,6 +31,11 @@ public class vector {
         this.word = word;
     }
 
+    public vector(Map<String, Map<String, Double>> vectorMap, String word) {
+        this.vectorMap = vectorMap;
+        this.word = word;
+    }
+
     public vector() {
         vectorMap = new HashMap();
     }
@@ -38,7 +44,7 @@ public class vector {
         return orderedList;
     }
 
-    void print() {
+    public void print() {
         if (this.vectorMap.isEmpty()) {
             System.out.println("Please index a file and try again for help type help");
         } else {
@@ -46,7 +52,7 @@ public class vector {
         }
     }
 
-    void addToMap(ArrayList<String> oneSentence) {
+    public void addToMap(ArrayList<String> oneSentence) {
 
         String keyWord;
         Map<String, Double> subMap = new HashMap();
@@ -122,9 +128,8 @@ public class vector {
             Map<String, Double> subMapForVValues;
             Collection<Double> valuesForPickedWord = new ArrayList();
             Collection<Double> valuesForOtherWords = new ArrayList();
-
             subMapForUValues = this.vectorMap.get(word);
-            valuesForPickedWord=subMapForUValues.values();
+            valuesForPickedWord = subMapForUValues.values();
             Iterator uValues = valuesForPickedWord.iterator();
 
             while (uValues.hasNext()) { //Big O of S
@@ -133,9 +138,7 @@ public class vector {
 
                 subKeyValues = this.vectorMap.keySet();
                 Iterator subKeys = subKeyValues.iterator();
-
                 while (subKeys.hasNext()) {
-
                     subKeyWord = (String) subKeys.next();
                     Collection<String> currentKey = new ArrayList();
                     subMapForVValues = this.vectorMap.get(subKeyWord);
@@ -143,9 +146,7 @@ public class vector {
                     Iterator currentWords = currentKey.iterator();
                     valuesForOtherWords.addAll(subMapForVValues.values());
                     Iterator vValues = valuesForOtherWords.iterator();
-
                     String currentWord = null;
-
                     while (vValues.hasNext()) { //Big O of J
                         if (currentWords.hasNext()) {
                             currentWord = currentWords.next().toString();
@@ -163,16 +164,13 @@ public class vector {
                     thatList.addOrder(subKeyWord, cosValue, number);
                     vSquared = 0;
                     numerator = 0;
-
                 }
-
             }
 
         } else {
             System.out.println("Cannot compute TopJ similarity to " + word);
 
         }
-
         thatList.printCos(number);
 
     }
@@ -281,6 +279,7 @@ public class vector {
                 subMapForVValues = this.vectorMap.get(subKeyWord);
                 valuesForOtherWords.addAll(subMapForVValues.values()); //gets the values for that key
                 Iterator vValues = valuesForOtherWords.iterator();
+                valuesForPickedWord.addAll(subMapForUValues.values());
                 Iterator uValues = valuesForPickedWord.iterator();
                 Iterator v2Values = valuesForOtherWords.iterator(); //puts the values in an iterator
                 currentKey.addAll(subMapForUValues.keySet());
@@ -338,30 +337,5 @@ public class vector {
             System.out.println("Cannot compute TopJ similarity to " + word);
         }
         finalNormValues.printEucNorm(number);
-    }
-
-    void kMeanClustering(int kMean, int iter) {
-        ArrayList means = new ArrayList();
-        Random rand = new Random();
-        double min = Double.MAX_VALUE;
-        int clusterNum;
-        double temp;
-        double value = 0;
-
-        for (int i = 0; i < kMean; i++) {
-            means.add(rand.nextInt(kMean + 1));
-        }
-        for (int i = 0; i < iter; i++) {
-
-            for (int j = 0; j < means.size(); j++) {
-                //some math needs to find value using computeEucDistance
-                temp = Math.abs((double) means.get(i) - value);
-                if (temp < min) {
-                    min = temp;
-                    clusterNum = i;
-                }
-                //add word to the cluster with that number 
-            }
-        }
     }
 }
