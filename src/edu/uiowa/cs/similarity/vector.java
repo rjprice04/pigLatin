@@ -124,6 +124,7 @@ public class vector {
             Collection<Double> valuesForOtherWords = new ArrayList();
 
             subMapForUValues = this.vectorMap.get(word);
+            valuesForPickedWord=subMapForUValues.values();
             Iterator uValues = valuesForPickedWord.iterator();
 
             while (uValues.hasNext()) { //Big O of S
