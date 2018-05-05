@@ -30,10 +30,12 @@ public class vector {
         this.vectorSet = vectorSet;
         this.word = word;
     }
-    public vector(Map<String, Map<String, Double>> vectorMap, String word){
+
+    public vector(Map<String, Map<String, Double>> vectorMap, String word) {
         this.vectorMap = vectorMap;
         this.word = word;
     }
+
     public vector() {
         vectorMap = new HashMap();
     }
@@ -127,7 +129,7 @@ public class vector {
             Collection<Double> valuesForPickedWord = new ArrayList();
             Collection<Double> valuesForOtherWords = new ArrayList();
             subMapForUValues = this.vectorMap.get(word);
-            valuesForPickedWord.addAll(subMapForUValues.values());
+            valuesForPickedWord = subMapForUValues.values();
             Iterator uValues = valuesForPickedWord.iterator();
 
             while (uValues.hasNext()) { //Big O of S
@@ -273,6 +275,7 @@ public class vector {
                 subMapForVValues = this.vectorMap.get(subKeyWord);
                 valuesForOtherWords.addAll(subMapForVValues.values()); //gets the values for that key
                 Iterator vValues = valuesForOtherWords.iterator();
+                valuesForPickedWord.addAll(subMapForUValues.values());
                 Iterator uValues = valuesForPickedWord.iterator();
                 Iterator v2Values = valuesForOtherWords.iterator(); //puts the values in an iterator
                 currentKey.addAll(subMapForUValues.keySet());
@@ -330,52 +333,5 @@ public class vector {
             System.out.println("Cannot compute TopJ similarity to " + word);
         }
         finalNormValues.printEucNorm(number);
-    }
-
-    void kMeanClustering(int kMean, int iter) {
-        ArrayList means = new ArrayList();
-        Random rand = new Random();
-        double min = Double.MAX_VALUE;
-        int clusterNum;
-        double temp;
-        double value = 0;
-
-        for (int i = 0; i < kMean; i++) {
-            means.add(rand.nextInt(kMean + 1));
-        }
-        for (int i = 0; i < iter; i++) {
-
-            for (int j = 0; j < means.size(); j++) {
-                //some math needs to find value using computeEucDistance
-                temp = Math.abs((double) means.get(i) - value);
-                if (temp < min) {
-                    min = temp;
-                    clusterNum = i;
-                }
-                //add word to the cluster with that number 
-            }
-        }
-    }
-    public ArrayList<String> findTopJOfCluster(vector mean, Map<String, Double> cluster, int j)
-    {
-        ArrayList<Pair<String, Double>> similarityRanking = new ArrayList<>();
-        for (Map.Entry<String,Double> entry: cluster.entrySet())
-        {
-            vector compVec = new vector(vectorSet, entry.getKey());            
-            Pair<String,Double> similarityPair = new Pair<>(entry.getKey(), mean.getList().getNodeCos(compVec.hashCode()));
-            similarityRanking.add(similarityPair);
-//            final Comparator<Pair<String, Double>> c = reverseOrder(comparing(Pair::getValue));
-//               // Sort the values
-//            Collections.sort(similarityRanking, c);
-        }
-        ArrayList<String> topJSimilarInCluster = new ArrayList<>();
-        similarityRanking.remove(mean.word);
-        for (int i=1; i<=j; i++)
-        {
-            if (i<cluster.size()) // Avoid indexing error - don't add a word if there are not more words in the cluster
-                topJSimilarInCluster.add(similarityRanking.get(i).getKey());
-//            }
-        }
-        return topJSimilarInCluster;
     }
 }

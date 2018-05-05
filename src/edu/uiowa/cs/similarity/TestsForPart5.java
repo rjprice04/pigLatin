@@ -9,12 +9,14 @@ import static org.junit.Assert.*;
 /**
  *
  * @author ryanprice
+ * since we didn't make the vector class easy to get the single value 
+ * the tests don't really work but here is what they might look like 
  */
 public class TestsForPart5 {
     public TestsForPart5(){
         
     }
-    @Test
+    @Test//Test for negative ecu distance
     public void negativeDistance(){
         vector thisVector = new vector();
         thisVector.addToMap(null);
@@ -22,11 +24,16 @@ public class TestsForPart5 {
         double AndFailed = 0;
         assertEquals(ITried,AndFailed);
     }
+    @Test //test for normal negative ecu ditance
     public void normalNegaticeDistace(){
         vector thatVector = new vector();
+        thatVector.addToMap(null);
         double ITried =0;
         double AndFailed =0;
-        thatVector.addToMap(null);
         assertEquals(ITried,AndFailed);
     }
+    
+    boolean assertEquals(double expected, double actual){
+        return actual <= expected+0.00001 && actual >= expected -0.00001;
+    } //check if value is withhin the value is between the range
 }
