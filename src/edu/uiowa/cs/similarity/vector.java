@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import javafx.util.Pair;
 
 /**
  *
@@ -29,7 +30,10 @@ public class vector {
         this.vectorSet = vectorSet;
         this.word = word;
     }
-
+    public vector(Map<String, Map<String, Double>> vectorMap, String word){
+        this.vectorMap = vectorMap;
+        this.word = word;
+    }
     public vector() {
         vectorMap = new HashMap();
     }
@@ -38,7 +42,7 @@ public class vector {
         return orderedList;
     }
 
-    void print() {
+    public void print() {
         if (this.vectorMap.isEmpty()) {
             System.out.println("Please index a file and try again for help type help");
         } else {
@@ -46,7 +50,7 @@ public class vector {
         }
     }
 
-    void addToMap(ArrayList<String> oneSentence) {
+    public void addToMap(ArrayList<String> oneSentence) {
 
         String keyWord;
         Map<String, Double> subMap = new HashMap();
@@ -122,8 +126,8 @@ public class vector {
             Map<String, Double> subMapForVValues;
             Collection<Double> valuesForPickedWord = new ArrayList();
             Collection<Double> valuesForOtherWords = new ArrayList();
-
             subMapForUValues = this.vectorMap.get(word);
+            valuesForPickedWord.addAll(subMapForUValues.values());
             Iterator uValues = valuesForPickedWord.iterator();
 
             while (uValues.hasNext()) { //Big O of S
@@ -132,9 +136,7 @@ public class vector {
 
                 subKeyValues = this.vectorMap.keySet();
                 Iterator subKeys = subKeyValues.iterator();
-
                 while (subKeys.hasNext()) {
-
                     subKeyWord = (String) subKeys.next();
                     Collection<String> currentKey = new ArrayList();
                     subMapForVValues = this.vectorMap.get(subKeyWord);
@@ -142,9 +144,7 @@ public class vector {
                     Iterator currentWords = currentKey.iterator();
                     valuesForOtherWords.addAll(subMapForVValues.values());
                     Iterator vValues = valuesForOtherWords.iterator();
-
                     String currentWord = null;
-
                     while (vValues.hasNext()) { //Big O of J
                         if (currentWords.hasNext()) {
                             currentWord = currentWords.next().toString();
@@ -162,16 +162,13 @@ public class vector {
                     thatList.addOrder(subKeyWord, cosValue, number);
                     vSquared = 0;
                     numerator = 0;
-
                 }
-
             }
 
         } else {
             System.out.println("Cannot compute TopJ similarity to " + word);
 
         }
-
         thatList.printCos(number);
 
     }
@@ -358,5 +355,27 @@ public class vector {
                 //add word to the cluster with that number 
             }
         }
+    }
+    public ArrayList<String> findTopJOfCluster(vector mean, Map<String, Double> cluster, int j)
+    {
+        ArrayList<Pair<String, Double>> similarityRanking = new ArrayList<>();
+        for (Map.Entry<String,Double> entry: cluster.entrySet())
+        {
+            vector compVec = new vector(vectorSet, entry.getKey());            
+            Pair<String,Double> similarityPair = new Pair<>(entry.getKey(), mean.getList().getNodeCos(compVec.hashCode()));
+            similarityRanking.add(similarityPair);
+//            final Comparator<Pair<String, Double>> c = reverseOrder(comparing(Pair::getValue));
+//               // Sort the values
+//            Collections.sort(similarityRanking, c);
+        }
+        ArrayList<String> topJSimilarInCluster = new ArrayList<>();
+        similarityRanking.remove(mean.word);
+        for (int i=1; i<=j; i++)
+        {
+            if (i<cluster.size()) // Avoid indexing error - don't add a word if there are not more words in the cluster
+                topJSimilarInCluster.add(similarityRanking.get(i).getKey());
+//            }
+        }
+        return topJSimilarInCluster;
     }
 }
