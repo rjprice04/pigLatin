@@ -257,7 +257,7 @@ public class vector {
             Collection<Double> valuesForPickedWord = new ArrayList();
             
             subMapForUValues=this.vectorMap.get(word);
-           // valuesForPickedWord=subMapForUValues.values();
+           
             
             Collection<Double> valuesForOtherWords = new ArrayList();
             Collection<String> currentKey = new HashSet<>();
