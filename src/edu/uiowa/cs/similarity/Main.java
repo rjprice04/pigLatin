@@ -5,8 +5,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import javafx.util.Pair;
 import opennlp.tools.stemmer.*;
 
 public class Main {
@@ -21,6 +23,7 @@ public class Main {
         System.out.println("topj- Input: Word(Q) and number(J). Find the J most simalar words to Q");
         System.out.println("within topj: euc: Word(Q) and number(J). Find the euclidean distance of two vectors.");
         System.out.println("within topj: eucnorm: Word(Q) and number(J). Find the normal euclidean distance of two vectors");
+        System.out.println("kmean- an integer k and an integer iter");
     }
 
     private static Set getStopWords() throws FileNotFoundException {
@@ -72,22 +75,15 @@ public class Main {
 
                 while (sc.hasNext()) {
                     //read in a sentence
-                   // ArrayList<String> cleanedInput = sc.next()(a.toLowerCase());
                     sentence = sc.next().toLowerCase();
+                    sentence = sentence.replaceAll(",|, |--|:|;|\"|'", "");
                     Scanner sw = new Scanner(sentence);
                     while (sw.hasNext()) {
                         //should have individual words now
                         word = sw.next().toLowerCase();
-                        if (word.endsWith(",")) {
-                            word = word.substring(0, word.length() - 1);
-                        }
                         if (!stopwords.contains(word) && word.length() > 1) {
                             word = porterStemmer.stem(word);
-                            if (word.contains(",")) {
-                                oneSentence.add(word.substring(0, word.length() - 1));
-                            } else {
-                                oneSentence.add(word);
-                            }
+                            oneSentence.add(word);
                         }
                     }
                     if (!oneSentence.isEmpty()) {
@@ -98,7 +94,6 @@ public class Main {
                     }
 
                 }
-                //aVector = new Vector(sentences);
             } else if (command.equals("sentences")) {
                 System.out.println(sentences);
                 System.out.println("Number of sentences");
@@ -117,28 +112,29 @@ public class Main {
                 int number = reader.nextInt();
                 System.out.println("What method would like to use?");
                 String choiceWord = input.readLine();
-                if(choiceWord.equals("euc")){
+                if (choiceWord.equals("euc")) {
                     aVector.computeEucDistance(word, number);
-                } else if(choiceWord.equals("eucnorm")){
-                    
-                } else if(choiceWord.equals("cosine") || choiceWord.equals("")) {
+                } else if (choiceWord.equals("eucnorm")) {
+                    aVector.computeNormEuc(word, number);
+                } else if (choiceWord.equals("cosine") || choiceWord.equals("")) {
                     aVector.computeTopJ(word, number);
-                } else{
+                } else {
                     aVector.computeTopJ(word, number);
                 }
-            } 
-            else if(command.equals("kmean")){
-                
-                System.out.println("What k do you want to use?");
-                Scanner reader = new Scanner(System.in);  // Reading from System.in
-                int kMean = reader.nextInt();
+            } else if (command.equals("kmean")) { //could not get this method to work.
+                kCluster clusters = new kCluster(aVector.vectorMap, aVector.vectorSet);
+                System.out.println("How many clusters?");
+                Scanner reader = new Scanner(System.in);
+                int num = reader.nextInt();
                 System.out.println("How many iterations?");
-                int iter = reader.nextInt();
-                
-            }
-                
-            else {
-                System.err.println("Unrecognized command");
+                Scanner reader2 = new Scanner(System.in);
+                int times = reader2.nextInt();
+                System.out.println("How many representatives?");
+                Scanner reader3 = new Scanner(System.in);
+                int rep = reader3.nextInt();
+                ArrayList<Pair<vector, Map<String, Double>>> clusterVectors = clusters.computeKMean(num, times, aVector);
+            } else {
+                System.out.println("Invalid command.");
             }
         }
     }
